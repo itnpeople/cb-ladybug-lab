@@ -1,0 +1,237 @@
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: acornsoft-dashboard
+  name: acornsoft-dashboard
+  namespace: acornsoft-dashboard
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: clusterrolebinding-acornsoft-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: acornsoft-dashboard
+  namespace: acornsoft-dashboard
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: metrics-scraper
+  name: metrics-scraper
+  namespace: acornsoft-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acornsoft-dashboard
+      acornsoft.dashboard: metrics-scraper
+  template:
+    metadata:
+      labels:
+        app: acornsoft-dashboard
+        acornsoft.dashboard: metrics-scraper
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: 'runtime/default'
+    spec:
+      containers:
+        - name: metrics-scraper
+          image: ghcr.io/acornsoftlab/acornsoft-dashboard.metrics-scraper:v0.3.0
+          imagePullPolicy: Always
+          args:
+            - --kubeconfig=/app/.kube/config
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              scheme: HTTP
+#              path: /
+#              port: 8000
+#            initialDelaySeconds: 30
+#            timeoutSeconds: 30
+          volumeMounts:
+            - mountPath: /app/.kube
+              name: dashboard-kubeconfig
+            - mountPath: /tmp
+              name: tmp-volume
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 1001
+            runAsGroup: 2001
+      volumes:
+        - name: dashboard-kubeconfig
+          configMap:
+            name: acornsoft-dashboard-kubeconfig
+        - name: tmp-volume
+          emptyDir: {}
+      serviceAccountName: acornsoft-dashboard
+      nodeSelector:
+        "kubernetes.io/os": linux
+
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: backend
+  name: backend
+  namespace: acornsoft-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acornsoft-dashboard
+      acornsoft.dashboard: backend
+  template:
+    metadata:
+      labels:
+        app: acornsoft-dashboard
+        acornsoft.dashboard: backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/acornsoftlab/acornsoft-dashboard.backend:v0.3.0
+          imagePullPolicy: Always
+          args:
+            - --kubeconfig=/app/.kube/config
+            - --metrics-scraper-url=http://metrics-scraper:8000
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /app/.kube
+            name: dashboard-kubeconfig
+            readOnly: false
+          - mountPath: /tmp
+            name: tmp-volume
+      volumes:
+        - name: dashboard-kubeconfig
+          configMap:
+            name: acornsoft-dashboard-kubeconfig
+            defaultMode: 0777
+        - name: tmp-volume
+          emptyDir: {}
+      serviceAccountName: acornsoft-dashboard
+      nodeSelector:
+        "kubernetes.io/os": linux
+
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: frontend
+  name: frontend
+  namespace: acornsoft-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acornsoft-dashboard
+      acornsoft.dashboard: frontend
+  template:
+    metadata:
+      labels:
+        app: acornsoft-dashboard
+        acornsoft.dashboard: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/acornsoftlab/acornsoft-dashboard.frontend:v0.3.0
+          imagePullPolicy: Always
+          env:
+          - name: BACKEND_PORT
+            value: "30081"
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp-volume
+      nodeSelector:
+        "kubernetes.io/os": linux
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: frontend
+  name: frontend
+  namespace: acornsoft-dashboard
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      nodePort: 30080
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: frontend
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: backend
+  name: backend
+  namespace: acornsoft-dashboard
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      nodePort: 30081
+      port: 3001
+      protocol: TCP
+      targetPort: 3001
+  selector:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: backend
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: metrics-scraper
+  name: metrics-scraper
+  namespace: acornsoft-dashboard
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: acornsoft-dashboard
+    acornsoft.dashboard: metrics-scraper
