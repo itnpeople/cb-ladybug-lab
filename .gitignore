@@ -1,3 +1,4 @@
 **/kubeconfig/*.yaml
 **/kubeconfig/config
 **/ssh/*.pem
+**/output/*
