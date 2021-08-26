@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+	<title></title>
+	<style>
+	</style>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<style>
+		.graph {width:100%; height:800px;}
+		.graph > svg {border:1px solid #ccc;}
+	</style>
+</head>
+<body>
+<main role="main" class="container-fluid" >
+	<h1>Node Locations</h1>
+	<div class="row">
+		<div class="col ml-2 text-muted">
+		Kubernetes Cluster Providers & Regions
+		</div>
+	</div>
+	<hr>
+	<!--<div class="row">
+		<div class="col-sm-1">Context</div>
+		<div class="col-sm-2">
+			<select id="cboContexts" class="form-control form-control-sm">
+				<option value="" selected></option>
+			</select>
+		</div>
+	</div>
+	<hr>-->
+	<div class="row">
+		<div class="col graph"></div>
+	</div>
+</main>
+</body>
+<script>
+	$.ajaxSetup({
+		type: 'GET',
+		contentType: "application/json; charset=utf-8",
+		dataType:"json",
+  		complete: () => {  }
+	});	
+</script>
+
+<script>
+	const exdata = [
+		{ name: "cb-cluster-1", provider:"gcp", region:"europe-west2"},
+		{ name: "cb-cluster-2", provider:"gcp", region:"europe-west2"},
+		{ name: "cb-cluster-3", provider:"gcp", region:"europe-west2"},
+		{ name: "cb-cluster-4", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-5", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-6", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-7", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-8", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-9", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-10", provider:"gcp", region:"asia-northeast3"  },
+		{ name: "cb-cluster-11", provider:"aws", region:"ap-east-1"  },
+		{ name: "cb-cluster-12", provider:"aws", region:"ap-east-1"  },
+		{ name: "cb-cluster-13", provider:"aws", region:"ap-east-1"  },
+		{ name: "cb-cluster-14", provider:"azure", region:"australiaeast"  },
+		{ name: "cb-cluster-15", provider:"azure", region:"australiaeast"  },
+		{ name: "cb-cluster-21", provider:"aws", region:"af-south-1" },
+		{ name: "cb-cluster-22", provider:"aws", region:"af-south-1" },
+		{ name: "cb-cluster-23", provider:"aws", region:"af-south-1" },
+		{ name: "cb-cluster-24", provider:"aws", region:"af-south-1" },
+		{ name: "cb-cluster-25", provider:"aws", region:"af-south-1" }]
+
+	$(function() {
+
+		//$.ajax({ url: "/api/contexts" })
+		//	.done(data=> { 
+		//		let c = document.getElementById("cboContexts");
+
+		//		data.forEach(d => {
+		//			let o = document.createElement("option");
+		//			o.setAttribute("value",d);
+		//			o.innerText = d;
+		//			c.append(o)
+		//		})
+		//	})
+
+		$.ajax({ url: "/api/nodes" })
+			.done(data=> { 
+				let nodes = [];
+				data.forEach(nd => {
+					nodes.push({
+						name: nd.metadata.name,
+						provider: nd.metadata.labels["cloudprovider.cloud-barista.org"],
+						region: nd.metadata.labels["topology.kubernetes.io/region"],
+						zone: nd.metadata.labels["topology.kubernetes.io/zone"],
+					});
+				});
+				let map = new kore3lab.Map(".graph");
+				map.render(nodes);
+			}
+		)
+	});
+
+</script>
+</html>

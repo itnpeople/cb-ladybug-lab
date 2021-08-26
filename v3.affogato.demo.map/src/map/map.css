@@ -1,0 +1,19 @@
+.country { fill: #ccc; stroke: #ffff }
+.country:hover { fill: GoldenRod;}
+.pin { 
+	fill: blue;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-name: fadeInOutTransition;
+	fill-opacity: 0.25;
+}
+@keyframes fadeInOutTransition {
+    0% { opacity: 0.25; }
+    50% {opacity: 1; }
+    100% { opacity: 0.25; }
+}
+.d3-tip {
+	padding: .5em;
+	font-size: 1em; line-height: 1.2;
+	background: black; color: #fff; opacity: 0.001%; border-radius: 2px;
+}
