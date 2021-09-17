@@ -48,15 +48,14 @@ export class Place {
 
 
 export class Map {
-	private container:HTMLElement;
+	private outlineEl:d3.Selection<SVGGElement, any, SVGElement, any>;
+	private projection:d3.GeoProjection;
+	private tip:any;
+
 	constructor(el:HTMLElement) {
-		this.container = el;
-	}
 
-	public render(nodes:any) {
-
-		if(!this.container) return;
-		let container:d3.Selection<any, any, any, any> = select(this.container);
+		if(!el) return;
+		let container:d3.Selection<any, any, any, any> = select(el);
 		
 		// svg
 		let svg:d3.Selection<SVGSVGElement, any, SVGElement, any> = container.select<SVGSVGElement>("svg");
@@ -68,8 +67,72 @@ export class Map {
 		// svg 크기 지정
 		svg.attr("width", bounds.width).attr("height", bounds.height);
 
+		//outline g
+		this.outlineEl = svg.select<SVGGElement>("g.outline");
+		if(this.outlineEl.size() > 0) this.outlineEl.remove();
+		this.outlineEl = svg.append("g").attr("class","outline");
+
+
+		//tip
+		if (!this.tip) {
+			this.tip = d3Tip()
+				.attr("class", "tip")
+				.offset([-5, 0])
+				.style("left", "300px")
+				.style("top", "400px")
+				.html((e:any,d:Place) => {
+					return `[${d.provider} ${d.region} - ${d.nodes.length}ea]<br><em>nodes:${d.nodes}</em>`;
+				})
+				this.outlineEl.call(this.tip);
+		}
+
+		//tip
+		let tip = d3Tip()
+			.attr("class", "tip")
+			.offset([-5, 0])
+			.style("left", "300px")
+			.style("top", "400px")
+			.html((e:any,d:Place) => {
+				return `[${d.provider} ${d.region} - ${d.nodes.length}ea]<br><em>nodes:${d.nodes}</em>`;
+			})
+			this.outlineEl.call(tip);
+
+
+		// projection & geoPath
+		this.projection = geoMercator()
+			.scale(bounds.width / 2.2 / Math.PI)
+			.rotate([0, 0])
+			.center([0, 0])
+			.translate([bounds.width / 2, bounds.height / 1.6]);
+		const pathGenerator = geoPath().projection(this.projection);
+
+
+		// render
+		json("https://raw.githubusercontent.com/janasayantan/datageojson/master/world.json").then(
+			(data:any) => {
+				this.outlineEl.selectAll("path")
+				.data(data.features)
+				.enter()
+				.append("path")
+					.attr("class", "country")
+					.attr("d", pathGenerator)
+					.append("title")
+						.text((d:any) => d.properties.name);
+
+				// zooming
+				svg.call(
+					zoom().on("zoom", ({ transform }) => {
+						this.outlineEl.attr("transform", transform);
+					})
+				);
+		});
+
+	}
+
+	public render(data:any) {
+
 		//{provider:"gcp", region:"europe-west2", nodes:[], locatin:{latitude: 37, longitude: 126}}
-		const places = nodes.reduce((accumulator, nd) => {
+		const places = data.reduce((accumulator, nd) => {
 			const provider = nd.provider || "unknown";
 			const region = nd.region || "unknown";
 			let d = accumulator.find(r => (r.provider==provider && r.region==region) );
@@ -81,68 +144,24 @@ export class Map {
 			return accumulator
 		}, [])
 
-		// rendering
-		this.populate(svg, bounds, places);
-	}
 
-	private populate(svg:d3.Selection<SVGSVGElement, any, SVGElement, any>,bounds:Bounds, places:Place[]) {
-
-		// projection & geoPath
-		const projection = geoMercator()
-			.scale(bounds.width / 2.2 / Math.PI)
-			.rotate([0, 0])
-			.center([0, 0])
-			.translate([bounds.width / 2, bounds.height / 1.6]);
-		const pathGenerator = geoPath().projection(projection);
-  
-		// render
-		json("https://raw.githubusercontent.com/janasayantan/datageojson/master/world.json").then(
-			(data:any) => {
-				const g = svg.append("g");
-				g.selectAll("path")
-				.data(data.features)
-				.enter()
-				.append("path")
-					.attr("class", "country")
-					.attr("d", pathGenerator)
-					.append("title")
-						.text((d:any) => d.properties.name);
-
-			// tip (popup)
-			let tip = d3Tip()
-				.attr("class", "d3-tip")
-				.offset([-5, 0])
-				.style("left", "300px")
-				.style("top", "400px")
-				.html((e:any,d:Place) => {
-					return `[${d.provider} ${d.region} - ${d.nodes.length}ea]<br><em>nodes:${d.nodes}</em>`;
-				})
-				g.call(tip);
-
-			// pin
-			g.selectAll(".pin")
-				.data(places)
-				.enter()
-				.append("circle")
-				.attr("class", "pin")
-				.attr("r", (d:Place)=> d.nodes?d.nodes.length*2:2)
-				.attr("transform", (d:Place) => {
-					return `translate(${projection([d.location.longitude,d.location.latitude])})`;
-				})
-				.on("mouseover", tip.show)
-				.on("mouseout", tip.hide);
-
-			// zooming
-			svg.call(
-				zoom().on("zoom", ({ transform }) => {
-					g.attr("transform", transform);
-				})
-			);
-
-		});
+		// pin
+		this.outlineEl.selectAll(".pin")
+			.remove()
+			.data(places)
+			.enter()
+			.append("circle")
+			.attr("class", "pin")
+			.attr("r", (d:Place)=> d.nodes?d.nodes.length*6:6)
+			.attr("transform", (d:Place) => {
+				return `translate(${this.projection([d.location.longitude,d.location.latitude])})`;
+			})
+			.on("mouseover", this.tip.show)
+			.on("mouseout", this.tip.hide);
 
 
 	}
+
 
 }
 

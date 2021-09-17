@@ -91,5 +91,17 @@
 		"canadaeast": { "name": "Canada East(Quebec City)", "location": {"latitude": 46.82387428877039, "longitude": -71.20985968147292} },
 		"uaenorth": { "name": "UAE North(Dubai)", "location": {"latitude": 25.218916237941414, "longitude": 55.27168780779122} },
 		"southafricanorth": { "name": "South Africa North(Johannesburg)", "location": {"latitude": -26.200785417784658, "longitude": 28.047577386871403} }
+	},
+	"tencent": {
+    "eu-moscow": { "name": "Europe (Moscow)", "location": {"latitude": 55.77142167026423, "longitude": 37.61073380420631} },
+    "eu-frankfurt": { "name": "Europe (Frankfurt)", "location": {"latitude": 50.1159076019923, "longitude": 8.68256831142611} },
+    "na-ashburn": { "name": "Eastern US (Virginia)", "location": {"latitude": 37.61750133727003, "longitude": -78.7076803168954} },
+    "na-siliconvalley": { "name": "Western US (Silicon Valley)", "location": {"latitude": 37.39339249723521, "longitude": -122.05762320342144} },
+    "na-toronto": { "name": "North America (Toronto)", "location": {"latitude": 43.66503105792879, "longitude": -79.38080795513712} },
+    "ap-bangkok": { "name": "Southeast Asia (Bangkok)", "location": {"latitude": 13.7705813270526, "longitude": 100.50333013636732} },
+    "ap-mumbai": { "name": "South Asia (Mumbai)", "location": {"latitude": 19.083210892900897, "longitude": 72.87912509543007} },
+    "ap-singapore": { "name": "Southeast Asia (Singapore)", "location": {"latitude": 1.3654804566699508, "longitude": 103.8208992835832} },
+    "ap-tokyo": { "name": "Northeast Asia (Tokyo)", "location": {"latitude": 35.6866298247536, "longitude": 139.7686758922112} },
+    "ap-seoul": { "name": "Northeast Asia (Seoul)", "location": {"latitude": 37.575202497985615, "longitude": 126.98163570575763} }
 	}
 }

@@ -16,9 +16,9 @@ module.exports = [
     },
     output: {
       path: path.resolve(__dirname, "dist"),
-      library: ["kore3lab"],
+      library: ["cloudbarista"],
       libraryTarget: "umd",
-      filename: "kore3lab.[name].js",
+      filename: "cloudbarista.[name].js",
       globalObject: "this",
     },
     module: {
@@ -30,8 +30,8 @@ module.exports = [
     plugins: [
       new HtmlWebpackPlugin({
         chunks: ["map"],
-        template: "./examples/map.html",
-        filename: "map.html",
+        template: "./html/index.html",
+        filename: "index.html",
       }),
     ],
     devtool: "source-map",

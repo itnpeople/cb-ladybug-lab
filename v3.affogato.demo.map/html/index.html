@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+	<title></title>
+	<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+	<style>
+		.graph {width:100%; height:800px;}
+		.graph > svg {border:1px solid #ccc;}
+	</style>
+</head>
+<body>
+<main role="main" class="container-fluid" >
+	<h1>Cluster</h1>
+	<div class="row">
+		<div class="col text-muted">Kubernetes Cluster Providers & Regions</div>
+		<div class="col-1 mr-5">
+			<button id="btnRefresh" class="btn btn-primary btn-sm" type="button" disabled>
+				<span class="visually-hidden">Refresh</span>
+				<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+			</button>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col graph"></div>
+	</div>
+</main>
+</body>
+<script>
+	$.ajaxSetup({
+		type: 'GET',
+		contentType: "application/json; charset=utf-8",
+		dataType:"json",
+  		complete: () => {  }
+	});	
+</script>
+
+<script>
+	let timer;
+
+	$(function() {
+
+		$("#btnRefresh").click(function() {
+			let $this = $(this);
+			clearTimeout(timer);
+			$this.attr("disabled", true);
+			$this.find("span.spinner-border").show()
+			$.ajax({ url: "/api/nodes" })
+				.done(data=> { 
+					let nodes = [];
+					data.forEach(nd => {
+						nodes.push({
+							name: nd.metadata.name,
+							provider: nd.metadata.labels["topology.cloud-barista.github.io/csp"],
+							region: nd.metadata.labels["topology.kubernetes.io/region"],
+							zone: nd.metadata.labels["topology.kubernetes.io/zone"],
+						});
+					});
+					let map = new kore3lab.Map(".graph");
+					map.render(nodes);
+					$this.find("span.spinner-border").hide();
+					$this.removeAttr("disabled");
+					//timer = setTimeout(function(){$("#btnRefresh").click()}, 5000);
+				}
+			)
+
+		});
+		$("#btnRefresh").click();
+
+	});
+
+</script>
+</html>

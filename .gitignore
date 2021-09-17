@@ -2,6 +2,9 @@
 **/kubeconfig/config
 **/ssh/*.pem
 **/output/*
+**/data/logs
+**/cb-operator
+**/meta_db/*
 
 node_modules/
 .DS_Store
