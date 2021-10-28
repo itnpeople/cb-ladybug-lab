@@ -9,7 +9,6 @@ echo "[INFO]"
 echo "- Namespace                  is '${c_NS}'"
 echo "- Cluster name               is '${c_CLUSTER}'"
 
-exit 0
 # ------------------------------------------------------------------------------
 # Delete a cluster
 curl -sX DELETE ${c_URL_MCKS_NS}/clusters/${c_CLUSTER}    -H "${c_CT}" | jq;

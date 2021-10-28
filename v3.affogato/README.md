@@ -65,6 +65,12 @@ $ ./init.sh "tencent" "singapore" "${HOME}/.tccli/default.credential"
 $ ./create-cluster.sh "aws" "tokyo"
 ```
 
+* Delete a cluster
+
+```
+$ ./delete-cluster.sh
+```
+
 
 ## Use Case #2 : Double-Clouds Provisioning
 
@@ -87,6 +93,12 @@ $ ./init.sh "gcp"     "tokyo" "${HOME}/.ssh/google-credential-cloudbarista.json"
 
 ```
 $ ./create-cluster-2.sh "aws" "tokyo" "gcp" "tokyo"
+```
+
+* Delete a cluster
+
+```
+$ ./delete-cluster.sh
 ```
 
 
@@ -114,6 +126,12 @@ $ ./init.sh "tencent" "singapore" "${HOME}/.tccli/default.credential"
 
 ```
 $ ./create-cluster-3.sh "aws" "tokyo" "gcp" "london" "tencent" "singapore"
+```
+
+* Delete a cluster
+
+```
+$ ./delete-cluster.sh
 ```
 
 
@@ -148,6 +166,11 @@ $ ./create-cluster-2.sh "aws" "tokyo" "tencent" "singapore"
 $ ./add-node.sh "gcp" "london"
 ```
 
+* Delete a cluster
+
+```
+$ ./delete-cluster.sh
+```
 
 
 ## 기타 스크립트 
