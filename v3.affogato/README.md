@@ -125,7 +125,7 @@ $ ./init.sh "tencent" "singapore" "${HOME}/.tccli/default.credential"
 * Create a cluster
 
 ```
-$ ./create-cluster-3.sh "aws" "tokyo" "gcp" "london" "tencent" "singapore"
+$ ./create-cluster-3.sh "aws" "tokyo" "gcp" "london" "tencent" "seoul"
 ```
 
 * Delete a cluster

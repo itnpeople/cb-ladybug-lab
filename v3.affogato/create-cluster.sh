@@ -19,6 +19,8 @@ echo "- Spec                       is '${c_SPEC}'"
 curl -sX POST -H "${c_CT}" ${c_URL_MCKS_NS}/clusters -d @- <<EOF
 {
    "name": "${c_CLUSTER}",
+   "label": "lab.",
+   "description": "create a cluster test",
    "controlPlane": [
       { "connection": "${c_CONFIG}", "count": 1, "spec": "${c_SPEC}" }
    ],

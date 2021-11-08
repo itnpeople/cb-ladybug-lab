@@ -2,8 +2,8 @@
 # ------------------------------------------------------------------------------
 if [ "$1" != "" ]; then CSP="$1"; fi
 if [ "$2" != "" ]; then R="$2"; fi
-if [ "${CSP}" == "" ]; then echo "Variable 'CSP' is mandatory"; exit -1; fi
-if [ "${R}" == "" ]; then echo "Variable 'R'(region) is mandatory"; exit -1; fi
+#if [ "${CSP}" == "" ]; then echo "Variable 'CSP' is mandatory"; exit -1; fi
+#if [ "${R}" == "" ]; then echo "Variable 'R'(region) is mandatory"; exit -1; fi
 
 # ------------------------------------------------------------------------------
 source ./const.env
