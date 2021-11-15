@@ -80,6 +80,18 @@ elif [ "${CSP}" == "azure" ]; then
 			{\"Key\" : \"SubscriptionId\",  \"Value\" : \"${c_AZURE_SUBSCRIPTION_ID}\"}
 		]
 	}"
+elif [ "${CSP}" == "openstack" ]; then
+	d="{
+		\"CredentialName\"   : \"${NM_CREDENTIAL}\",
+		\"ProviderName\"     : \"${CSP_UPPER}\",
+		\"KeyValueInfoList\" : [
+			{\"Key\" : \"IdentityEndpoint\",  \"Value\" : \"${OS_AUTH_URL}\"},
+			{\"Key\" : \"Username\",          \"Value\" : \"${OS_USERNAME}\"},
+			{\"Key\" : \"Password\",          \"Value\" : \"${OS_PASSWORD}\"},
+			{\"Key\" : \"DomainName\",        \"Value\" : \"${OS_USER_DOMAIN_NAME}\"},
+			{\"Key\" : \"ProjectID\",         \"Value\" : \"${OS_PROJECT_ID}\"}
+		]
+	}"
 else
 	# aws, alibaba, tencent
 	d="{

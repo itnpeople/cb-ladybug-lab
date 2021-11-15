@@ -56,13 +56,20 @@ $ export CLUSTER="cb-cluster-1"
 $ ./init.sh "aws"     "tokyo"     "${HOME}/.aws/credentials"
 $ ./init.sh "gcp"     "usca"      "${HOME}/.ssh/google-credential-cloudbarista.json"
 $ ./init.sh "azure"   "london"    "${HOME}/.azure/azure-credential-cloudbarista.json"
+$ ./init.sh "alibaba"  "tokyo"    "${HOME}/.ssh/alibaba_accesskey.csv"
 $ ./init.sh "tencent" "singapore" "${HOME}/.tccli/default.credential"
+
+$ source ${HOME}/.ssh/openstack-openrc.sh
+$ ./init.sh "openstack"
 ```
 
 * Create a cluster
 
 ```
 $ ./create-cluster.sh "aws" "tokyo"
+
+# if openstack
+$ ./create-cluster.sh "openstack"
 ```
 
 * Delete a cluster

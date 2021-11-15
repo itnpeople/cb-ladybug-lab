@@ -6,7 +6,7 @@ if [ "$2" != "" ]; then R="$2"; fi
 if [ "$3" != "" ]; then FILE="$3"; fi
 if [ "${CSP}" == "" ]; then echo "Variable 'CSP' is mandatory"; exit -1; fi
 if [ "${R}" == "" ]; then echo "Variable 'R'(region) is mandatory"; exit -1; fi
-if [ "${FILE}" == "" ]; then echo "Variable 'FILE'(credential filepath) is mandatory"; exit -1; fi
+if [ "${FILE}" == "" -a "${CSP}" != "openstack" ]; then echo "Variable 'FILE'(credential filepath) is mandatory"; exit -1; fi
 
 # ------------------------------------------------------------------------------
 if [ "${CSP}" == "aws" ]; then 
@@ -27,10 +27,19 @@ if [ "${CSP}" == "azure" ]; then
 	export c_AZURE_CLIENT_ID="$(cat ${FILE} | jq '.clientId' | sed  '/^$/d; s/\r//; s/"//g')"
 	export c_AZURE_CLIENT_SECRET="$(cat ${FILE} | jq '.clientSecret' | sed  '/^$/d; s/\r//; s/"//g')"
 fi
+if [ "${CSP}" == "alibaba" ]; then 
+	#FILE="${HOME}/.ssh/alibaba_accesskey.csv"
+	export c_SECRET_ID="$(cat ${FILE} | awk 'FNR==2' | cut -f1 -d ',')"
+	export c_SECRET_KEY="$(cat ${FILE} | awk 'FNR==2' | cut -f2 -d ',')"
+fi
 if [ "${CSP}" == "tencent" ]; then 
 	#FILE="${HOME}/.tccli/default.credential"
 	export c_SECRET_ID="$(cat ${FILE} | jq '.secretId' | sed  '/^$/d; s/\r//; s/"//g')"
 	export c_SECRET_KEY="$(cat ${FILE} | jq '.secretKey' | sed  '/^$/d; s/\r//; s/"//g')"
 fi
+#if [ "${CSP}" == "openstack" ]; then 
+#	#FILE="${HOME}/.ssh/openstack-openrc.sh"
+#	source "${FILE}"
+#fi
 
 
