@@ -215,6 +215,10 @@ $ cat output/ns.json
 
 ## 앱 설치 검증
 
+```
+$ export KUBECONFIG="$(pwd)/kubeconfig/cb-cluster.yaml"
+```
+
 ### metrics-server 설치
 > https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
 
@@ -224,6 +228,40 @@ $ kubectl apply -f yaml/metrics-server-0.3.7.yaml
 $ kubectl get apiservice -w
 $ kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes
 ```
+
+### kubernetes-dahsboard
+> https://github.com/kubernetes/dashboard
+
+```
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
+$ kubectl get po -n kubernetes-dashboard
+
+$ kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+EOF
+
+$ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+$ kubectl proxy
+```
+
+* open your browser `http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/.`
 
 
 ### weavescope
@@ -241,7 +279,7 @@ $ kubectl get po -n weave -w
 $ kubectl port-forward svc/weave-scope-app 8080:80 -n weave
 ```
 
-* open your browser "http://localhost:8080/"
+* open your browser `http://localhost:8080/`
 
 
 
@@ -285,7 +323,6 @@ $ kubectl exec -it httpbin-3  -- curl http://httpbin-2/ip
 ```
 
 
-
 ## Clean-up 
 
 ```
@@ -294,21 +331,30 @@ $ rm -rf data/mcks/meta_db/ data/spider/meta_db/ data/tumblebug/meta_db/
 $ rm -f kubeconfig/* output/* ssh/*
 ```
 
-### Clouds 
+### Cloud Provider 별 수동 제거
 
 *  AWS
-  * VPC > VCP (삭제)
-  * EC2 > 네트워크 및 보안 > 키페어 (삭제)
+
+  * VPC > VCP
+  * EC2 > 네트워크 및 보안 > 키페어
 
 * GCP
-  * VPC 네트워크 > VCP 네트워크 (삭제)
 
+  * VPC 네트워크 > VCP 네트워크
 
 * Azure
-  * VCP (가상 네트워크) (삭제)
-  * SecurityGroup (네트워크 보안 그룹) (삭제)
+
+  * VCP (가상 네트워크)
+  * SecurityGroup (네트워크 보안 그룹)
+
+* Alibaba
+> TODO
 
 * Tencent
-  * (Product) Virtual Private Cloud > VPC (삭제)
-  * (Product) Cloud Virtual Machine > SSH KEY (삭제)
-  * (Product) Virtual Private Cloud > Security > Security Group (삭제)
+
+  * (Product) Virtual Private Cloud > VPC
+  * (Product) Cloud Virtual Machine > SSH KEY
+  * (Product) Virtual Private Cloud > Security > Security Group
+
+* OpenStack
+> TODO

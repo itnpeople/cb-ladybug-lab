@@ -4,6 +4,10 @@ source ./env.sh
 
 # ------------------------------------------------------------------------------
 
+curl -sX GET ${c_URL_MCKS_NS}/clusters/${c_CLUSTER}
+echo "${c_URL_MCKS_NS}/clusters/${c_CLUSTER}"
+exit 0
+
 NM_SSHKEY="${CSP}-${R}-sshkey"
 
 if [ "${CSP}" == "tencent" ]; then 
