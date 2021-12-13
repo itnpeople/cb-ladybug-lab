@@ -5,6 +5,8 @@
 **/data/logs
 **/cb-operator
 **/meta_db/*
+**/output/
+credentials
 
 node_modules/
 .DS_Store
@@ -15,6 +17,7 @@ dist/
 *.js.map
 *.db
 yarn.lock
+*.jtl
 
 # IDE specific files:
 .idea/

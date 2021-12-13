@@ -1,0 +1,418 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spider-conf
+  labels:
+    app.kubernetes.io/part-of: cloud-barista
+data:
+  log_conf.yaml: |2-
+    cblog:
+      loopcheck: true # This temp method for development is busy wait. cf) cblogger.go:levelSetupLoop().
+      loglevel: error # If loopcheck is true, You can set this online.
+      logfile: false
+    logfileinfo:
+      filename: ./log/cblogs.log
+      maxsize: 10 # megabytes
+      maxbackups: 50
+      maxage: 31 # days
+  store_conf.yaml: |2-
+    storetype: NUTSDB
+    #storetype: ETCD
+    nutsdb:
+      dbpath: "$CBSTORE_ROOT/meta_db/dat"
+      segmentsize: 1048576  # 1048576 1024*1024 (1MB)
+      #segmentsize: 10485760  # 10485760 10*1024*1024 (10MB)
+    etcd:
+      etcdserverport: "129.254.175.43:2379"
+  calllog_conf.yaml: |2-
+    calllog:
+      loopcheck: false # This temp method for development is busy wait. cf) calllogger.go:levelSetupLoop().
+      loglevel: info # If loopcheck is true, You can set this online.
+      logfile: true
+    logfileinfo:
+      filename: $CBSPIDER_ROOT/log/calllog/calllogs.log
+      maxsize: 20 # megabytes
+      maxbackups: 100
+      maxage: 365 # days
+  cloudos.yaml: |2-
+    cloudos:
+      - AWS
+      - GCP
+      - AZURE
+      - OPENSTACK
+      - CLOUDIT
+      - ALIBABA
+      - DOCKER
+      - NCP
+    
+      - MOCK
+      - CLOUDTWIN
+  grpc_conf.yaml: |2-
+    version: 1
+    grpc:
+      spidersrv:
+        addr: :2048
+        interceptors:
+          prometheus_metrics:
+            listen_port: 9092
+          opentracing:
+            jaeger:
+              endpoint: localhost:6831
+              service_name: spider grpc server
+              sample_rate: 1
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tumblebug-conf
+  labels:
+    app.kubernetes.io/part-of: cloud-barista
+data:
+  log_conf.yaml: |2-
+    cblog:
+      loopcheck: true # This temp method for development is busy wait. cf) cblogger.go:levelSetupLoop().
+      loglevel: error # If loopcheck is true, You can set this online.
+      logfile: false
+    logfileinfo:
+      filename: ./log/cblogs.log
+      maxsize: 10 # megabytes
+      maxbackups: 50
+      maxage: 31 # days
+  setup.env: |2-
+    export CBSTORE_ROOT=$GOPATH/src/github.com/cloud-barista/cb-tumblebug
+    export CBLOG_ROOT=$GOPATH/src/github.com/cloud-barista/cb-tumblebug
+    export CBTUMBLEBUG_ROOT=$GOPATH/src/github.com/cloud-barista/cb-tumblebug
+    export SPIDER_CALL_METHOD=REST
+    export SPIDER_URL=http://localhost:1024/spider
+    export DRAGONFLY_URL=http://localhost:9090/dragonfly
+
+    export DB_URL=localhost:3306
+    export DB_DATABASE=cb_tumblebug
+    export DB_USER=cb_tumblebug
+    export DB_PASSWORD=cb_tumblebug
+
+    export API_USERNAME=default
+    export API_PASSWORD=default
+  store_conf.yaml: |2-
+    storetype: NUTSDB
+    #storetype: ETCD
+    nutsdb:
+      dbpath: "$CBSTORE_ROOT/meta_db/dat"
+      segmentsize: 1048576  # 1048576 1024*1024 (1MB)
+      #segmentsize: 10485760  # 10485760 10*1024*1024 (10MB)
+    etcd:
+      etcdserverport: "129.254.175.43:2379"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcks-conf
+  labels:
+    app.kubernetes.io/part-of: cloud-barista
+data:
+  log_conf.yaml: |2-
+    cblog:
+      loopcheck: true # This temp method for development is busy wait. cf) cblogger.go:levelSetupLoop().
+      loglevel: error # If loopcheck is true, You can set this online.
+      logfile: false
+    logfileinfo:
+      filename: ./log/cblogs.log
+      maxsize: 10 # megabytes
+      maxbackups: 50
+      maxage: 31 # days
+  setup.env: |2-
+    export CBLOG_ROOT=$GOPATH/src/github.com/cloud-barista/cb-mcks
+    export CBSTORE_ROOT=$GOPATH/src/github.com/cloud-barista/cb-mcks
+    export SPIDER_URL=http://localhost:1024/spider
+    export TUMBLEBUG_URL=http://localhost:1323/tumblebug
+    export BASE_PATH=/mcks
+  store_conf.yaml: |2-
+    storetype: NUTSDB
+    #storetype: ETCD
+    nutsdb:
+      dbpath: "$CBSTORE_ROOT/meta_db/dat"
+      segmentsize: 1048576  # 1048576 1024*1024 (1MB)
+      #segmentsize: 10485760  # 10485760 10*1024*1024 (10MB)
+    etcd:
+      etcdserverport: "129.254.175.43:2379"
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mcks
+  labels:
+    app.kubernetes.io/part-of: cloud-barista
+    app.kubernetes.io/component: mcks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: cloud-barista
+      app.kubernetes.io/component: mcks
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: cloud-barista
+        app.kubernetes.io/component: mcks
+    spec:
+      containers:
+        - name: spider
+          image: cloudbaristaorg/cb-spider:0.4.19
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 1024
+              protocol: TCP
+          env:
+            - name: CBSTORE_ROOT
+              value: /data
+          #resources:
+          #  requests:
+          #    memory: "64Mi"
+          #    cpu: "20m"
+          #  limits:
+          #    memory: "64Mi"
+          #    cpu: "20m"
+          volumeMounts:
+            - mountPath: /data/conf
+              name: spider-conf-volume
+            - mountPath: /data/meta_db
+              name: spider-data-volume
+        - name: tumblebug
+          image: cloudbaristaorg/cb-tumblebug:0.4.17
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 1323
+              protocol: TCP
+          env:
+            - name: SPIDER_REST_URL
+              value: http://localhost:1024/spider
+          #resources:
+          #  requests:
+          #    memory: "64Mi"
+          #    cpu: "20m"
+          #  limits:
+          #    memory: "64Mi"
+          #    cpu: "20m"
+          volumeMounts:
+            - mountPath: /app/conf
+              name: tumblebug-conf-volume
+            - mountPath: /app/meta_db
+              name: tumblebug-data-volume
+        - name: mcks
+          image: cloudbaristaorg/cb-mcks:0.4.5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 1470
+              protocol: TCP
+          env:
+            - name: CBSTORE_ROOT
+              value: /data
+            - name: SPIDER_URL
+              value: http://localhost:1024/spider
+            - name: TUMBLEBUG_URL
+              value: http://localhost:1323/tumblebug
+          #resources:
+          #  requests:
+          #    memory: "64Mi"
+          #    cpu: "20m"
+          #  limits:
+          #    memory: "64Mi"
+          #    cpu: "20m"
+          volumeMounts:
+            - mountPath: /data/conf
+              name: mcks-conf-volume
+            - mountPath: /data/meta_db
+              name: mcks-data-volume
+      volumes:
+        - name: spider-data-volume
+          emptyDir: {}
+        - name: tumblebug-data-volume
+          emptyDir: {}
+        - name: mcks-data-volume
+          emptyDir: {}
+        - name: spider-conf-volume
+          configMap:
+            name: spider-conf
+        - name: tumblebug-conf-volume
+          configMap:
+            name: tumblebug-conf
+        - name: mcks-conf-volume
+          configMap:
+            name: mcks-conf
+      nodeSelector:
+        "kubernetes.io/os": linux
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mcks
+  labels:
+    app.kubernetes.io/part-of: cloud-barista
+    app.kubernetes.io/component: mcks
+spec:
+  type: NodePort
+  ports:
+    - name: spider
+      nodePort: 30081
+      port: 1024
+      protocol: TCP
+      targetPort: 1024
+    - name: tumblebug
+      nodePort: 30082
+      port: 1323
+      protocol: TCP
+      targetPort: 1323
+    - name: mcks
+      nodePort: 30083
+      port: 1470
+      protocol: TCP
+      targetPort: 1470
+  selector:
+    app.kubernetes.io/part-of: cloud-barista
+    app.kubernetes.io/component: mcks
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-test
+  labels:
+    app.kubernetes.io/part-of: cloud-barista
+data:
+  simple-test.jmx: |2-
+    <?xml version="1.0" encoding="UTF-8"?>
+    <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
+      <hashTree>
+        <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+          <stringProp name="TestPlan.comments"></stringProp>
+          <boolProp name="TestPlan.functional_mode">false</boolProp>
+          <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+          <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+          <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="TestPlan.user_define_classpath"></stringProp>
+        </TestPlan>
+        <hashTree>
+          <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+            <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+            <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+              <boolProp name="LoopController.continue_forever">false</boolProp>
+              <stringProp name="LoopController.loops">1</stringProp>
+            </elementProp>
+            <stringProp name="ThreadGroup.num_threads">1</stringProp>
+            <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+            <boolProp name="ThreadGroup.scheduler">false</boolProp>
+            <stringProp name="ThreadGroup.duration"></stringProp>
+            <stringProp name="ThreadGroup.delay"></stringProp>
+            <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+          </ThreadGroup>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">www.google.com</stringProp>
+              <stringProp name="HTTPSampler.port"></stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">/</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree/>
+          </hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </jmeterTestPlan>
+
+---
+
+# kubectl create configmap mcks-jmx --from-file=$(pwd)/mcks.jmx
+
+#apiVersion: batch/v1beta1
+#kind: CronJob
+#metadata:
+#  name: jmeter
+#  labels:
+#    app.kubernetes.io/part-of: cloud-barista
+#    app.kubernetes.io/component: mcks
+#spec:
+#  schedule: "*/1 * * * *"
+#  jobTemplate:
+#    spec:
+#      template:
+#        spec:
+#          containers:
+#          - name: mcks
+#            image: honester/jmbase:latest
+#            imagePullPolicy: IfNotPresent
+#            command:
+#            - jmeter
+#            - -n
+#            - -t
+#            - /jmeter/mcks.jmx
+#            - -l
+#            - /jmeter/mcks.jtl
+#            env:
+#              - name: HOST
+#                value: mcks
+#            volumeMounts:
+#              - mountPath: /jmeter/mcks.jmx
+#                name: jmx-volume
+#                subPath: mcks.jmx
+#          restartPolicy: Never  #OnFailure
+#          volumes:
+#            - name: jmx-volume
+#              configMap:
+#                name: mcks-jmx
+---
+
+

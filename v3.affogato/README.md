@@ -61,6 +61,9 @@ $ ./init.sh "tencent" "singapore" "${HOME}/.tccli/default.credential"
 
 $ source ${HOME}/.ssh/openstack-openrc.sh
 $ ./init.sh "openstack"
+
+# clean-up
+# ./cleanup-init.sh "aws" "tokyo" 
 ```
 
 * Create a cluster
