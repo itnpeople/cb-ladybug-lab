@@ -23,6 +23,7 @@ $ ./credentials.sh \
   azure="${HOME}/.azure/azure-credential-cloudbarista.json" \
   alibaba="${HOME}/.ssh/alibaba_accesskey.csv" \
   tencent="${HOME}/.tccli/default.credential" \
+  ibm="${HOME}/.ssh/ibm-apikey.json" \
   openstack="${HOME}/.ssh/openstack-openrc.sh" > credentials
 $ chmod +x credentials
 ```
@@ -85,6 +86,7 @@ $ source ./credentials.sh \
   azure="${HOME}/.azure/azure-credential-cloudbarista.json" \
   alibaba="${HOME}/.ssh/alibaba_accesskey.csv" \
   tencent="${HOME}/.tccli/default.credential" \
+  ibm="${HOME}/.ssh/ibm-apikey.json" \
   openstack="${HOME}/.ssh/openstack-openrc.sh"
 ```
 
@@ -95,7 +97,6 @@ $ export HOST="localhost"
 $ source ./credentials
 $ jmeter -t mcks.jmx
 ```
-
 
 
 ## Distributed Testing (docker)

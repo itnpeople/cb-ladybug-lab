@@ -51,31 +51,37 @@
           </elementProp>
           <elementProp name="CSP_1" elementType="Argument">
             <stringProp name="Argument.name">CSP_1</stringProp>
-            <stringProp name="Argument.value">aws</stringProp>
+            <stringProp name="Argument.value">ibm</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">aws</stringProp>
           </elementProp>
-          <elementProp name="CSP_2" elementType="Argument">
-            <stringProp name="Argument.name">CSP_2</stringProp>
+          <elementProp name="_CSP_2" elementType="Argument">
+            <stringProp name="Argument.name">_CSP_2</stringProp>
             <stringProp name="Argument.value">gcp</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="CSP_3" elementType="Argument">
-            <stringProp name="Argument.name">CSP_3</stringProp>
+          <elementProp name="_CSP_3" elementType="Argument">
+            <stringProp name="Argument.name">_CSP_3</stringProp>
             <stringProp name="Argument.value">azure</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="CSP_4" elementType="Argument">
-            <stringProp name="Argument.name">CSP_4</stringProp>
+          <elementProp name="_CSP_4" elementType="Argument">
+            <stringProp name="Argument.name">_CSP_4</stringProp>
             <stringProp name="Argument.value">alibaba</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="CSP_5" elementType="Argument">
-            <stringProp name="Argument.name">CSP_5</stringProp>
+          <elementProp name="_CSP_5" elementType="Argument">
+            <stringProp name="Argument.name">_CSP_5</stringProp>
             <stringProp name="Argument.value">tencent</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="_CSP_6" elementType="Argument">
             <stringProp name="Argument.name">_CSP_6</stringProp>
+            <stringProp name="Argument.value">ibm</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="_CSP_7" elementType="Argument">
+            <stringProp name="Argument.name">_CSP_7</stringProp>
             <stringProp name="Argument.value">openstack</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -83,7 +89,7 @@
             <stringProp name="Argument.name">REGION</stringProp>
             <stringProp name="Argument.value">tokyo</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">지역</stringProp>
+            <stringProp name="Argument.desc">지역(tokyo, seoul, usca, london, singapore</stringProp>
           </elementProp>
           <elementProp name="AZURE_RG" elementType="Argument">
             <stringProp name="Argument.name">AZURE_RG</stringProp>
@@ -192,6 +198,11 @@
             <stringProp name="Argument.value">${__BeanShell( System.getenv(&quot;OS_REGION_NAME&quot;) )}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="IBM_API_KEY" elementType="Argument">
+            <stringProp name="Argument.name">IBM_API_KEY</stringProp>
+            <stringProp name="Argument.value">${__BeanShell( System.getenv(&quot;IBM_API_KEY&quot;) )}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="AWS_SPEC" elementType="Argument">
             <stringProp name="Argument.name">AWS_SPEC</stringProp>
             <stringProp name="Argument.value">t2.medium</stringProp>
@@ -220,6 +231,11 @@
           <elementProp name="OPENSTACK_SPEC" elementType="Argument">
             <stringProp name="Argument.name">OPENSTACK_SPEC</stringProp>
             <stringProp name="Argument.value">m1.medium</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="IBM_SPEC" elementType="Argument">
+            <stringProp name="Argument.name">IBM_SPEC</stringProp>
+            <stringProp name="Argument.value">bx2-2x8</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -415,6 +431,15 @@ if(&quot;${CSP}&quot;.equals(&quot;tencent&quot;)) {
 	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-singapore&quot;;		c_zone = c_region + &quot;-1&quot;; }
 	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;na-siliconvalley&quot;;	c_zone = c_region + &quot;-2&quot;; }
 	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-frankfurt&quot;;		c_zone = c_region + &quot;-1&quot;; }
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;ibm&quot;)) {
+	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;kr-seo&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;jp-tok&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-gb&quot;; }
+	c_zone = c_region + &quot;a&quot;;
 }
 
 if(&quot;${CSP}&quot;.equals(&quot;openstack&quot;)) {
@@ -972,6 +997,152 @@ prev.setResponseOK();</stringProp>
                   </HeaderManager>
                   <hashTree/>
                 </hashTree>
+                <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
+                  <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
+                  <boolProp name="IfController.evaluateAll">false</boolProp>
+                  <boolProp name="IfController.useExpression">true</boolProp>
+                </IfController>
+                <hashTree>
+                  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
+                    <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                    <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                      <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                          <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                          <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                          <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </elementProp>
+                    <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                    <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                    <stringProp name="HTTPSampler.protocol"></stringProp>
+                    <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                    <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                    <stringProp name="HTTPSampler.method">POST</stringProp>
+                    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                    <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                    <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                    <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                  </HTTPSamplerProxy>
+                  <hashTree>
+                    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                      <collectionProp name="HeaderManager.headers">
+                        <elementProp name="" elementType="Header">
+                          <stringProp name="Header.name">Content-Type</stringProp>
+                          <stringProp name="Header.value">application/json</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </HeaderManager>
+                    <hashTree/>
+                  </hashTree>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If IBM" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;ibm&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IBM Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ApiKey&quot;,     &quot;Value&quot; : &quot;${IBM_API_KEY}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+                <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
+                  <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
+                  <boolProp name="IfController.evaluateAll">false</boolProp>
+                  <boolProp name="IfController.useExpression">true</boolProp>
+                </IfController>
+                <hashTree>
+                  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
+                    <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                    <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                      <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                          <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                          <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                          <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </elementProp>
+                    <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                    <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                    <stringProp name="HTTPSampler.protocol"></stringProp>
+                    <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                    <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                    <stringProp name="HTTPSampler.method">POST</stringProp>
+                    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                    <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                    <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                    <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                  </HTTPSamplerProxy>
+                  <hashTree>
+                    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                      <collectionProp name="HeaderManager.headers">
+                        <elementProp name="" elementType="Header">
+                          <stringProp name="Header.name">Content-Type</stringProp>
+                          <stringProp name="Header.value">application/json</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </HeaderManager>
+                    <hashTree/>
+                  </hashTree>
+                </hashTree>
               </hashTree>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Connection 조회" enabled="true">
@@ -1075,6 +1246,7 @@ if(&quot;${CSP}&quot;.equals(&quot;azure&quot;))		c_spec = &quot;${AZURE_SPEC}&q
 if(&quot;${CSP}&quot;.equals(&quot;alibaba&quot;))	c_spec = &quot;${ALIBABA_SPEC}&quot;;
 if(&quot;${CSP}&quot;.equals(&quot;tencent&quot;))	c_spec = &quot;${TENCENT_SPEC}&quot;;
 if(&quot;${CSP}&quot;.equals(&quot;openstack&quot;))	c_spec = &quot;${OPENSTACK_SPEC}&quot;;
+if(&quot;${CSP}&quot;.equals(&quot;ibm&quot;))		c_spec = &quot;${IBM_SPEC}&quot;;
 
 vars.put(&quot;CSP_UPPER&quot;, 	&quot;${CSP}&quot;.toUpperCase());
 vars.put(&quot;c_CONFIG&quot;, 	&quot;config-${CSP}-${REGION}&quot;);

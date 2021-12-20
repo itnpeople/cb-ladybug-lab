@@ -11,12 +11,12 @@ do
             alibaba)    ALIBABA_FILE=${VALUE} ;;
             tencent)    TENCENT_FILE=${VALUE} ;;
             oepnstack)  OPENSTACK_FILE=${VALUE} ;;
+            ibm)        IBM_FILE=${VALUE} ;;
             *)   
     esac    
 
 
 done
-
 if [ "${AWS_FILE}" != "" ]; then 
 	#FILE="${HOME}/.aws/credentials"
 	export AWS_SECRET_ID="$(head -n 3 ${AWS_FILE} | tail -n 1 | sed  '/^$/d; s/\r//; s/aws_access_key_id = //g')"
@@ -65,3 +65,8 @@ fi
 #	source "${OPENSTACK_FILE}"
 #fi
 
+if [ "${IBM_FILE}" != "" ]; then 
+	#FILE="${HOME}/.ssh/ibm-apikey.json"
+	export IBM_API_KEY="$(cat ${IBM_FILE} | jq '.apikey' | sed  '/^$/d; s/\r//; s/"//g')"
+	echo "export IBM_API_KEY=\"${IBM_API_KEY}\""
+fi
