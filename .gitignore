@@ -18,6 +18,7 @@ dist/
 *.db
 yarn.lock
 *.jtl
+*.hprof
 
 # IDE specific files:
 .idea/

@@ -14,10 +14,6 @@ c_NS="acornsoft"
 c_URL_TUMBLEBUG="http://localhost:1323/tumblebug"
 c_URL_MCKS="http://localhost:1470/mcks"
 
-if [ "${CSP}" == "tencent" ]; then 
-	c_SSHKEY=$(echo ${c_SSHKEY} | sed -e 's/-//g')
-fi
-
 # ------------------------------------------------------------------------------
 rm -f ssh/${c_CLUSTER}.pem
 curl -sX GET ${c_URL_TUMBLEBUG}/ns/${c_NS}/resources/sshKey/${c_SSHKEY}  -H "${c_AUTH}" -H "${c_CT}" -d "{\"connectionName\" : \"${c_CONFIG}\"}" | jq -r ".privateKey" > ssh/${c_CLUSTER}.pem

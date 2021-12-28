@@ -91,12 +91,6 @@
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">지역(tokyo, seoul, usca, london, singapore</stringProp>
           </elementProp>
-          <elementProp name="CNI" elementType="Argument">
-            <stringProp name="Argument.name">CNI</stringProp>
-            <stringProp name="Argument.value">canal</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">canal, kilo</stringProp>
-          </elementProp>
           <elementProp name="AZURE_RG" elementType="Argument">
             <stringProp name="Argument.name">AZURE_RG</stringProp>
             <stringProp name="Argument.value">cb-mcks</stringProp>
@@ -231,9 +225,8 @@
           </elementProp>
           <elementProp name="TENCENT_SPEC" elementType="Argument">
             <stringProp name="Argument.name">TENCENT_SPEC</stringProp>
-            <stringProp name="Argument.value">S5.MEDIUM8</stringProp>
+            <stringProp name="Argument.value">S5.LARGE8</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">S5.LARGE8</stringProp>
           </elementProp>
           <elementProp name="OPENSTACK_SPEC" elementType="Argument">
             <stringProp name="Argument.name">OPENSTACK_SPEC</stringProp>
@@ -284,822 +277,6 @@ vars.put(&quot;StatusCode&quot;,&quot;500&quot;);</stringProp>
           <boolProp name="TransactionController.parent">false</boolProp>
         </TransactionController>
         <hashTree>
-          <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach CSP" enabled="true">
-            <stringProp name="ForeachController.inputVal">CSP</stringProp>
-            <stringProp name="ForeachController.returnVal">CSP</stringProp>
-            <boolProp name="ForeachController.useSeparator">true</boolProp>
-          </ForeachController>
-          <hashTree>
-            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="변수정의" enabled="true">
-              <stringProp name="filename"></stringProp>
-              <stringProp name="parameters"></stringProp>
-              <boolProp name="resetInterpreter">false</boolProp>
-              <stringProp name="script">String c_region = &quot;&quot;;
-String c_zone = &quot;&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;aws&quot;)) {
-	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;ap-northeast-2&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;ap-northeast-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-southeast-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;us-west-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-west-2&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;india&quot;))		{ c_region = &quot;ap-south-1&quot;; }
-	c_zone = c_region + &quot;a&quot;;
-}
-
-if(&quot;${CSP}&quot;.equals(&quot;gcp&quot;)) {
-	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;asia-northeast3&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;asia-northeast1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;asia-southeast1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;us-west2&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;europe-west2&quot;; }
-	c_zone = c_region + &quot;-a&quot;;
-}
-
-if(&quot;${CSP}&quot;.equals(&quot;azure&quot;)) {
-	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;koreacentral&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;japaneast&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;southeastasia&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;westus&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;uksouth&quot;; }
-	c_zone = &quot;*&quot;;
-}
-
-if(&quot;${CSP}&quot;.equals(&quot;alibaba&quot;)) {
-//	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;ap-northeast-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-southeast-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;us-west-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-west-1&quot;; }
-	c_zone = c_region + &quot;a&quot;;
-}
-
-if(&quot;${CSP}&quot;.equals(&quot;tencent&quot;)) {
-	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;ap-seoul&quot;;			c_zone = c_region + &quot;-2&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;ap-tokyo&quot;;			c_zone = c_region + &quot;-2&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-singapore&quot;;		c_zone = c_region + &quot;-1&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;na-siliconvalley&quot;;	c_zone = c_region + &quot;-2&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-frankfurt&quot;;		c_zone = c_region + &quot;-1&quot;; }
-}
-
-if(&quot;${CSP}&quot;.equals(&quot;ibm&quot;)) {
-	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;kr-seo&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;jp-tok&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;&quot;; }
-	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-gb&quot;; }
-	c_zone = c_region + &quot;a&quot;;
-}
-
-if(&quot;${CSP}&quot;.equals(&quot;openstack&quot;)) {
-	c_region	= &quot;${OS_REGION_NAME}&quot;;
-	c_zone	= c_region;
-}
-
-
-vars.put(&quot;CSP_UPPER&quot;, 	&quot;${CSP}&quot;.toUpperCase());
-vars.put(&quot;c_CONFIG&quot;, 	&quot;config-${CSP}-${REGION}&quot;);
-vars.put(&quot;c_REGION&quot;,	c_region);
-vars.put(&quot;c_ZONE&quot;,		c_zone);</stringProp>
-            </BeanShellPreProcessor>
-            <hashTree/>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Driver 삭제" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-                <collectionProp name="Arguments.arguments"/>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/driver/${CSP}-driver-v1.0</stringProp>
-              <stringProp name="HTTPSampler.method">DELETE</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script">prev.setResponseOK();</stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Driver 생성" enabled="true">
-              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&#xd;
-&quot;DriverName&quot;        : &quot;${CSP}-driver-v1.0&quot;,&#xd;
-&quot;ProviderName&quot;      : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;DriverLibFileName&quot; : &quot;${CSP}-driver-v1.0.so&quot;&#xd;
-}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/driver</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                <collectionProp name="HeaderManager.headers">
-                  <elementProp name="" elementType="Header">
-                    <stringProp name="Header.name">Content-Type</stringProp>
-                    <stringProp name="Header.value">application/json</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </HeaderManager>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Region 삭제" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-                <collectionProp name="Arguments.arguments"/>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/region/region-${CSP}-${REGION}</stringProp>
-              <stringProp name="HTTPSampler.method">DELETE</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script">prev.setResponseOK();</stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="AZURE면" enabled="true">
-              <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;CSP&quot;) == &quot;azure&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AZURE Region 생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;RegionName&quot;       : &quot;region-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;, &#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-	{&quot;Key&quot; : &quot;location&quot;,      &quot;Value&quot; : &quot;${c_REGION}&quot;},&#xd;
-	{&quot;Key&quot; : &quot;ResourceGroup&quot;, &quot;Value&quot; : &quot;${AZURE_RG}&quot;}&#xd;
-]}&#xd;
-</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/region</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="AZURE가 아니먄" enabled="true">
-              <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;CSP&quot;) != &quot;azure&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Region 생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;RegionName&quot;       : &quot;region-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;, &#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-	{&quot;Key&quot; : &quot;Region&quot;, &quot;Value&quot; : &quot;${c_REGION}&quot;},&#xd;
-	{&quot;Key&quot; : &quot;Zone&quot;,   &quot;Value&quot; : &quot;${c_ZONE}&quot;}&#xd;
-]}&#xd;
-</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/region</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Credential 삭제" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-                <collectionProp name="Arguments.arguments"/>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/credential/credential-${CSP}-${REGION}</stringProp>
-              <stringProp name="HTTPSampler.method">DELETE</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());
-prev.setResponseOK();</stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AWS" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;aws&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AWS Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${AWS_SECRET_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${AWS_SECRET_KEY}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If GCP" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;gcp&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">true</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GCP Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientEmail&quot;, &quot;Value&quot; : &quot;${GCP_SA}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ProjectID&quot;,   &quot;Value&quot; : &quot;${GCP_PROJECT}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;PrivateKey&quot;,  &quot;Value&quot; : &quot;${GCP_PKEY}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AZURE" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;azure&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">true</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AZURE Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,       &quot;Value&quot; : &quot;${AZURE_CLIENT_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;,   &quot;Value&quot; : &quot;${AZURE_CLIENT_SECRET}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;TenantId&quot;,       &quot;Value&quot; : &quot;${AZURE_TENANT_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;SubscriptionId&quot;, &quot;Value&quot; : &quot;${AZURE_SUBSCRIPTION_ID}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If OpenStack" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;openstack&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">true</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="OPENSTACK Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;IdentityEndpoint&quot;, &quot;Value&quot; : &quot;${OS_AUTH_URL}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;Username&quot;,         &quot;Value&quot; : &quot;${OS_USERNAME}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;Password&quot;,         &quot;Value&quot; : &quot;${OS_PASSWORD}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;DomainName&quot;,       &quot;Value&quot; : &quot;${OS_USER_DOMAIN_NAME}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ProjectID&quot;,        &quot;Value&quot; : &quot;${OS_PROJECT_ID}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If ALIBABA" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;alibaba&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ALIBABA Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${ALIBABA_SECRET_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${ALIBABA_SECRET_KEY}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
-                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
-                <boolProp name="IfController.evaluateAll">false</boolProp>
-                <boolProp name="IfController.useExpression">true</boolProp>
-              </IfController>
-              <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
-                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments">
-                      <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
-]}</stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </elementProp>
-                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                  <stringProp name="HTTPSampler.protocol"></stringProp>
-                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                  <stringProp name="HTTPSampler.method">POST</stringProp>
-                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
-                </HTTPSamplerProxy>
-                <hashTree>
-                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                    <collectionProp name="HeaderManager.headers">
-                      <elementProp name="" elementType="Header">
-                        <stringProp name="Header.name">Content-Type</stringProp>
-                        <stringProp name="Header.value">application/json</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </HeaderManager>
-                  <hashTree/>
-                </hashTree>
-              </hashTree>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If IBM" enabled="true">
-              <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;ibm&quot;)}</stringProp>
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IBM Credential생성" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ApiKey&quot;,     &quot;Value&quot; : &quot;${IBM_API_KEY}&quot;}&#xd;
-]}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                <stringProp name="HTTPSampler.protocol"></stringProp>
-                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                  <collectionProp name="HeaderManager.headers">
-                    <elementProp name="" elementType="Header">
-                      <stringProp name="Header.name">Content-Type</stringProp>
-                      <stringProp name="Header.value">application/json</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </HeaderManager>
-                <hashTree/>
-              </hashTree>
-              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
-                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
-                <boolProp name="IfController.evaluateAll">false</boolProp>
-                <boolProp name="IfController.useExpression">true</boolProp>
-              </IfController>
-              <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
-                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments">
-                      <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
-]}</stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </elementProp>
-                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                  <stringProp name="HTTPSampler.protocol"></stringProp>
-                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                  <stringProp name="HTTPSampler.method">POST</stringProp>
-                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
-                </HTTPSamplerProxy>
-                <hashTree>
-                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                    <collectionProp name="HeaderManager.headers">
-                      <elementProp name="" elementType="Header">
-                        <stringProp name="Header.name">Content-Type</stringProp>
-                        <stringProp name="Header.value">application/json</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </HeaderManager>
-                  <hashTree/>
-                </hashTree>
-              </hashTree>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Connection 삭제" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-                <collectionProp name="Arguments.arguments"/>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/connectionconfig/${c_CONFIG}</stringProp>
-              <stringProp name="HTTPSampler.method">DELETE</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script">prev.setResponseOK();</stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Connection 생성" enabled="true">
-              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&#xd;
-&quot;ConfigName&quot;     : &quot;${c_CONFIG}&quot;,&#xd;
-&quot;ProviderName&quot;   : &quot;${CSP_UPPER}&quot;, &#xd;
-&quot;DriverName&quot;     : &quot;${CSP}-driver-v1.0&quot;, &#xd;
-&quot;CredentialName&quot; : &quot;credential-${CSP}-${REGION}&quot;, &#xd;
-&quot;RegionName&quot;     : &quot;region-${CSP}-${REGION}&quot;&#xd;
-}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/connectionconfig</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                <collectionProp name="HeaderManager.headers">
-                  <elementProp name="" elementType="Header">
-                    <stringProp name="Header.name">Content-Type</stringProp>
-                    <stringProp name="Header.value">application/json</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </HeaderManager>
-              <hashTree/>
-            </hashTree>
-          </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="NS 조회" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
@@ -1199,6 +376,867 @@ prev.setResponseOK();</stringProp>
               <hashTree/>
             </hashTree>
           </hashTree>
+          <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach CSP" enabled="true">
+            <stringProp name="ForeachController.inputVal">CSP</stringProp>
+            <stringProp name="ForeachController.returnVal">CSP</stringProp>
+            <boolProp name="ForeachController.useSeparator">true</boolProp>
+          </ForeachController>
+          <hashTree>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="변수정의" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">String c_region = &quot;&quot;;
+String c_zone = &quot;&quot;;
+if(&quot;${CSP}&quot;.equals(&quot;aws&quot;)) {
+	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;ap-northeast-2&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;ap-northeast-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-southeast-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;us-west-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-west-2&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;india&quot;))		{ c_region = &quot;ap-south-1&quot;; }
+	c_zone = c_region + &quot;a&quot;;
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;gcp&quot;)) {
+	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;asia-northeast3&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;asia-northeast1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;asia-southeast1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;us-west2&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;europe-west2&quot;; }
+	c_zone = c_region + &quot;-a&quot;;
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;azure&quot;)) {
+	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;koreacentral&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;japaneast&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;southeastasia&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;westus&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;uksouth&quot;; }
+	c_zone = &quot;*&quot;;
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;alibaba&quot;)) {
+//	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;ap-northeast-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-southeast-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;us-west-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-west-1&quot;; }
+	c_zone = c_region + &quot;a&quot;;
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;tencent&quot;)) {
+	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;ap-seoul&quot;;			c_zone = c_region + &quot;-2&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;ap-tokyo&quot;;			c_zone = c_region + &quot;-2&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;ap-singapore&quot;;		c_zone = c_region + &quot;-1&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;na-siliconvalley&quot;;	c_zone = c_region + &quot;-2&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-frankfurt&quot;;		c_zone = c_region + &quot;-1&quot;; }
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;ibm&quot;)) {
+	if (&quot;${REGION}&quot;.equals(&quot;seoul&quot;))		{ c_region = &quot;kr-seo&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;tokyo&quot;))		{ c_region = &quot;jp-tok&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;singapore&quot;))	{ c_region = &quot;&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;usca&quot;)) 		{ c_region = &quot;&quot;; }
+	if (&quot;${REGION}&quot;.equals(&quot;london&quot;))		{ c_region = &quot;eu-gb&quot;; }
+	c_zone = c_region + &quot;a&quot;;
+}
+
+if(&quot;${CSP}&quot;.equals(&quot;openstack&quot;)) {
+	c_region	= &quot;${OS_REGION_NAME}&quot;;
+	c_zone	= c_region;
+}
+
+
+vars.put(&quot;CSP_UPPER&quot;, 	&quot;${CSP}&quot;.toUpperCase());
+vars.put(&quot;c_CONFIG&quot;, 	&quot;config-${CSP}-${REGION}&quot;);
+vars.put(&quot;c_REGION&quot;,	c_region);
+vars.put(&quot;c_ZONE&quot;,		c_zone);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Driver 조회" enabled="true">
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+              <stringProp name="HTTPSampler.protocol"></stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">/spider/driver/${CSP}-driver-v1.0</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());
+prev.setResponseOK();</stringProp>
+              </BeanShellPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Driver 없다면" enabled="true">
+              <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;StatusCode&quot;)!=&quot;200&quot;)}</stringProp>
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Driver 생성" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+&quot;DriverName&quot;        : &quot;${CSP}-driver-v1.0&quot;,&#xd;
+&quot;ProviderName&quot;      : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;DriverLibFileName&quot; : &quot;${CSP}-driver-v1.0.so&quot;&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">/spider/driver</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                  <collectionProp name="HeaderManager.headers">
+                    <elementProp name="" elementType="Header">
+                      <stringProp name="Header.name">Content-Type</stringProp>
+                      <stringProp name="Header.value">application/json</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </HeaderManager>
+                <hashTree/>
+              </hashTree>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Region 조회" enabled="true">
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+              <stringProp name="HTTPSampler.protocol"></stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">/spider/region/region-${CSP}-${REGION}</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());
+prev.setResponseOK();</stringProp>
+              </BeanShellPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Region 없다면" enabled="true">
+              <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;StatusCode&quot;)!=&quot;200&quot;)}</stringProp>
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+            </IfController>
+            <hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="AZURE면" enabled="true">
+                <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;CSP&quot;) == &quot;azure&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AZURE Region 생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;RegionName&quot;       : &quot;region-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;, &#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+	{&quot;Key&quot; : &quot;location&quot;,      &quot;Value&quot; : &quot;${c_REGION}&quot;},&#xd;
+	{&quot;Key&quot; : &quot;ResourceGroup&quot;, &quot;Value&quot; : &quot;${AZURE_RG}&quot;}&#xd;
+]}&#xd;
+</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/region</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="AZURE가 아니먄" enabled="true">
+                <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;CSP&quot;) != &quot;azure&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Region 생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;RegionName&quot;       : &quot;region-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;, &#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+	{&quot;Key&quot; : &quot;Region&quot;, &quot;Value&quot; : &quot;${c_REGION}&quot;},&#xd;
+	{&quot;Key&quot; : &quot;Zone&quot;,   &quot;Value&quot; : &quot;${c_ZONE}&quot;}&#xd;
+]}&#xd;
+</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/region</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Credential 조회" enabled="true">
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+              <stringProp name="HTTPSampler.protocol"></stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">/spider/credential/credential-${CSP}-${REGION}</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());
+prev.setResponseOK();</stringProp>
+              </BeanShellPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Credential 없다면" enabled="true">
+              <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;StatusCode&quot;)!=&quot;200&quot;)}</stringProp>
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+            </IfController>
+            <hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AWS" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;aws&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AWS Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${AWS_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${AWS_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If GCP" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;gcp&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">true</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GCP Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientEmail&quot;, &quot;Value&quot; : &quot;${GCP_SA}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ProjectID&quot;,   &quot;Value&quot; : &quot;${GCP_PROJECT}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;PrivateKey&quot;,  &quot;Value&quot; : &quot;${GCP_PKEY}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AZURE" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;azure&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">true</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AZURE Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,       &quot;Value&quot; : &quot;${AZURE_CLIENT_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;,   &quot;Value&quot; : &quot;${AZURE_CLIENT_SECRET}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;TenantId&quot;,       &quot;Value&quot; : &quot;${AZURE_TENANT_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;SubscriptionId&quot;, &quot;Value&quot; : &quot;${AZURE_SUBSCRIPTION_ID}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If OpenStack" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;openstack&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">true</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="OPENSTACK Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;IdentityEndpoint&quot;, &quot;Value&quot; : &quot;${OS_AUTH_URL}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;Username&quot;,         &quot;Value&quot; : &quot;${OS_USERNAME}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;Password&quot;,         &quot;Value&quot; : &quot;${OS_PASSWORD}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;DomainName&quot;,       &quot;Value&quot; : &quot;${OS_USER_DOMAIN_NAME}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ProjectID&quot;,        &quot;Value&quot; : &quot;${OS_PROJECT_ID}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If ALIBABA" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;alibaba&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ALIBABA Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${ALIBABA_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${ALIBABA_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+                <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
+                  <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
+                  <boolProp name="IfController.evaluateAll">false</boolProp>
+                  <boolProp name="IfController.useExpression">true</boolProp>
+                </IfController>
+                <hashTree>
+                  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
+                    <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                    <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                      <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                          <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                          <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                          <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </elementProp>
+                    <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                    <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                    <stringProp name="HTTPSampler.protocol"></stringProp>
+                    <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                    <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                    <stringProp name="HTTPSampler.method">POST</stringProp>
+                    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                    <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                    <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                    <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                  </HTTPSamplerProxy>
+                  <hashTree>
+                    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                      <collectionProp name="HeaderManager.headers">
+                        <elementProp name="" elementType="Header">
+                          <stringProp name="Header.name">Content-Type</stringProp>
+                          <stringProp name="Header.value">application/json</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </HeaderManager>
+                    <hashTree/>
+                  </hashTree>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If IBM" enabled="true">
+                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;ibm&quot;)}</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IBM Credential생성" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ApiKey&quot;,     &quot;Value&quot; : &quot;${IBM_API_KEY}&quot;}&#xd;
+]}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                    <collectionProp name="HeaderManager.headers">
+                      <elementProp name="" elementType="Header">
+                        <stringProp name="Header.name">Content-Type</stringProp>
+                        <stringProp name="Header.value">application/json</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </HeaderManager>
+                  <hashTree/>
+                </hashTree>
+                <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
+                  <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
+                  <boolProp name="IfController.evaluateAll">false</boolProp>
+                  <boolProp name="IfController.useExpression">true</boolProp>
+                </IfController>
+                <hashTree>
+                  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
+                    <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                    <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                      <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                          <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                          <stringProp name="Argument.value">{&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
+&quot;KeyValueInfoList&quot; : [&#xd;
+    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
+    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
+]}</stringProp>
+                          <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </elementProp>
+                    <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                    <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                    <stringProp name="HTTPSampler.protocol"></stringProp>
+                    <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                    <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
+                    <stringProp name="HTTPSampler.method">POST</stringProp>
+                    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                    <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                    <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                    <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                  </HTTPSamplerProxy>
+                  <hashTree>
+                    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                      <collectionProp name="HeaderManager.headers">
+                        <elementProp name="" elementType="Header">
+                          <stringProp name="Header.name">Content-Type</stringProp>
+                          <stringProp name="Header.value">application/json</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </HeaderManager>
+                    <hashTree/>
+                  </hashTree>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Connection 조회" enabled="true">
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+              <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+              <stringProp name="HTTPSampler.protocol"></stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">/spider/connectionconfig/${c_CONFIG}</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());
+prev.setResponseOK();</stringProp>
+              </BeanShellPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Connection 없다면" enabled="true">
+              <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;StatusCode&quot;)!=&quot;200&quot;)}</stringProp>
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Connection 생성" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+&quot;ConfigName&quot;     : &quot;${c_CONFIG}&quot;,&#xd;
+&quot;ProviderName&quot;   : &quot;${CSP_UPPER}&quot;, &#xd;
+&quot;DriverName&quot;     : &quot;${CSP}-driver-v1.0&quot;, &#xd;
+&quot;CredentialName&quot; : &quot;credential-${CSP}-${REGION}&quot;, &#xd;
+&quot;RegionName&quot;     : &quot;region-${CSP}-${REGION}&quot;&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
+                <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">/spider/connectionconfig</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
+                  <collectionProp name="HeaderManager.headers">
+                    <elementProp name="" elementType="Header">
+                      <stringProp name="Header.name">Content-Type</stringProp>
+                      <stringProp name="Header.value">application/json</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </HeaderManager>
+                <hashTree/>
+              </hashTree>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;LargeScaleCluster&gt;" enabled="true">
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
+          <boolProp name="TransactionController.parent">false</boolProp>
+        </TransactionController>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="변수정의" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">vars.put(&quot;c_CLUSTER&quot;, 	&quot;${CLUSTER}&quot;);
+</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Cluster 조회" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
@@ -1207,7 +1245,7 @@ prev.setResponseOK();</stringProp>
             <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${CLUSTER}</stringProp>
+            <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${c_CLUSTER}</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -1241,7 +1279,7 @@ prev.setResponseOK();</stringProp>
               <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
               <stringProp name="HTTPSampler.protocol"></stringProp>
               <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${CLUSTER}</stringProp>
+              <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${c_CLUSTER}</stringProp>
               <stringProp name="HTTPSampler.method">DELETE</stringProp>
               <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -1263,287 +1301,14 @@ prev.setResponseOK();</stringProp>
               <hashTree/>
             </hashTree>
           </hashTree>
-        </hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Single CSP&gt;" enabled="false">
-          <boolProp name="TransactionController.includeTimers">false</boolProp>
-          <boolProp name="TransactionController.parent">false</boolProp>
-        </TransactionController>
-        <hashTree>
-          <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach CSP" enabled="true">
-            <stringProp name="ForeachController.inputVal">CSP</stringProp>
-            <stringProp name="ForeachController.returnVal">CSP</stringProp>
-            <boolProp name="ForeachController.useSeparator">true</boolProp>
-          </ForeachController>
-          <hashTree>
-            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="변수정의" enabled="true">
-              <stringProp name="filename"></stringProp>
-              <stringProp name="parameters"></stringProp>
-              <boolProp name="resetInterpreter">false</boolProp>
-              <stringProp name="script">String c_spec = &quot;&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;aws&quot;))		c_spec = &quot;${AWS_SPEC}&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;gcp&quot;))		c_spec = &quot;${GCP_SPEC}&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;azure&quot;))		c_spec = &quot;${AZURE_SPEC}&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;alibaba&quot;))	c_spec = &quot;${ALIBABA_SPEC}&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;tencent&quot;))	c_spec = &quot;${TENCENT_SPEC}&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;openstack&quot;))	c_spec = &quot;${OPENSTACK_SPEC}&quot;;
-if(&quot;${CSP}&quot;.equals(&quot;ibm&quot;))		c_spec = &quot;${IBM_SPEC}&quot;;
-
-vars.put(&quot;CSP_UPPER&quot;, 	&quot;${CSP}&quot;.toUpperCase());
-vars.put(&quot;c_CONFIG&quot;, 	&quot;config-${CSP}-${REGION}&quot;);
-vars.put(&quot;c_SPEC&quot;, 		c_spec);</stringProp>
-            </BeanShellPreProcessor>
-            <hashTree/>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Cluster 생성" enabled="true">
-              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&#xd;
-   &quot;name&quot;: &quot;${CLUSTER}&quot;,&#xd;
-   &quot;label&quot;: &quot;lab.&quot;,&#xd;
-   &quot;description&quot;: &quot;create a cluster test&quot;,&#xd;
-   &quot;controlPlane&quot;: [&#xd;
-      { &quot;connection&quot;: &quot;${c_CONFIG}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${c_SPEC}&quot; }&#xd;
-   ],&#xd;
-   &quot;worker&quot;: [&#xd;
-      { &quot;connection&quot;: &quot;${c_CONFIG}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${c_SPEC}&quot; }&#xd;
-    ],&#xd;
-    &quot;config&quot;: {&#xd;
-        &quot;kubernetes&quot;: {&#xd;
-            &quot;networkCni&quot;: &quot;${CNI}&quot;,&#xd;
-            &quot;podCidr&quot;: &quot;10.244.0.0/16&quot;,&#xd;
-            &quot;serviceCidr&quot;: &quot;10.96.0.0/12&quot;,&#xd;
-            &quot;serviceDnsDomain&quot;: &quot;cluster.local&quot;&#xd;
-        }&#xd;
-    }&#xd;
-}&#xd;
-</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                <collectionProp name="HeaderManager.headers">
-                  <elementProp name="" elementType="Header">
-                    <stringProp name="Header.name">Content-Type</stringProp>
-                    <stringProp name="Header.value">application/json</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </HeaderManager>
-              <hashTree/>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());</stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Node 추가" enabled="true">
-              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&#xd;
-  &quot;worker&quot;: [&#xd;
-    {&#xd;
-      &quot;connection&quot;: &quot;${c_CONFIG}&quot;,&#xd;
-      &quot;count&quot;: 1,&#xd;
-      &quot;spec&quot;: &quot;${c_SPEC}&quot;&#xd;
-    }&#xd;
-  ]&#xd;
-}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${c_CLUSTER}/nodes</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                <collectionProp name="HeaderManager.headers">
-                  <elementProp name="" elementType="Header">
-                    <stringProp name="Header.name">Content-Type</stringProp>
-                    <stringProp name="Header.value">application/json</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </HeaderManager>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Cluster 삭제" enabled="false">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-                <collectionProp name="Arguments.arguments"/>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-              <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${CLUSTER}</stringProp>
-              <stringProp name="HTTPSampler.method">DELETE</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                <collectionProp name="HeaderManager.headers">
-                  <elementProp name="" elementType="Header">
-                    <stringProp name="Header.name">Content-Type</stringProp>
-                    <stringProp name="Header.value">application/json</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </HeaderManager>
-              <hashTree/>
-            </hashTree>
-          </hashTree>
-        </hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Multi-CSP&gt;" enabled="false">
-          <boolProp name="TransactionController.includeTimers">false</boolProp>
-          <boolProp name="TransactionController.parent">false</boolProp>
-        </TransactionController>
-        <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Multi-CSP Cluster 생성" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Cluster 생성" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.value">{&#xd;
-   &quot;name&quot;: &quot;${CLUSTER}&quot;,&#xd;
-   &quot;label&quot;: &quot;lab.&quot;,&#xd;
-   &quot;description&quot;: &quot;create a cluster test&quot;,&#xd;
-   &quot;controlPlane&quot;: [&#xd;
-      { &quot;connection&quot;: &quot;config-aws-${REGION}&quot;, &quot;count&quot;: 3, &quot;spec&quot;: &quot;${AWS_SPEC}&quot; }&#xd;
-   ],&#xd;
-   &quot;worker&quot;: [&#xd;
-      { &quot;connection&quot;: &quot;config-aws-${REGION}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${AWS_SPEC}&quot; },&#xd;
-      { &quot;connection&quot;: &quot;config-gcp-${REGION}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${GCP_SPEC}&quot; },&#xd;
-      { &quot;connection&quot;: &quot;config-azure-${REGION}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${AZURE_SPEC}&quot; },&#xd;
-      { &quot;connection&quot;: &quot;config-alibaba-${REGION}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${ALIBABA_SPEC}&quot; },&#xd;
-      { &quot;connection&quot;: &quot;config-tencent-${REGION}&quot;, &quot;count&quot;: 1, &quot;spec&quot;: &quot;${TENCENT_SPEC}&quot; }&#xd;
-    ],&#xd;
-    &quot;config&quot;: {&#xd;
-        &quot;kubernetes&quot;: {&#xd;
-            &quot;networkCni&quot;: &quot;${CNI}&quot;,&#xd;
-            &quot;podCidr&quot;: &quot;10.244.0.0/16&quot;,&#xd;
-            &quot;serviceCidr&quot;: &quot;10.96.0.0/12&quot;,&#xd;
-            &quot;serviceDnsDomain&quot;: &quot;cluster.local&quot;&#xd;
-        }&#xd;
-    }&#xd;
-}&#xd;
-</stringProp>
-                  <stringProp name="Argument.metadata">=</stringProp>
-                </elementProp>
-              </collectionProp>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-            <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters</stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-            <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          </HTTPSamplerProxy>
-          <hashTree>
-            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-              <collectionProp name="HeaderManager.headers">
-                <elementProp name="" elementType="Header">
-                  <stringProp name="Header.name">Content-Type</stringProp>
-                  <stringProp name="Header.value">application/json</stringProp>
-                </elementProp>
-              </collectionProp>
-            </HeaderManager>
-            <hashTree/>
-            <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="응답처리" enabled="true">
-              <stringProp name="filename"></stringProp>
-              <stringProp name="parameters"></stringProp>
-              <boolProp name="resetInterpreter">false</boolProp>
-              <stringProp name="script">vars.put(&quot;StatusCode&quot;,ctx.getPreviousResult().getResponseCode());</stringProp>
-            </BeanShellPostProcessor>
-            <hashTree/>
-          </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Multi-CSP Cluster 삭제" enabled="false">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-            <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${CLUSTER}</stringProp>
-            <stringProp name="HTTPSampler.method">DELETE</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-            <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          </HTTPSamplerProxy>
-          <hashTree>
-            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-              <collectionProp name="HeaderManager.headers">
-                <elementProp name="" elementType="Header">
-                  <stringProp name="Header.name">Content-Type</stringProp>
-                  <stringProp name="Header.value">application/json</stringProp>
-                </elementProp>
-              </collectionProp>
-            </HeaderManager>
-            <hashTree/>
-          </hashTree>
-        </hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Large-Scale&gt;" enabled="true">
-          <boolProp name="TransactionController.includeTimers">false</boolProp>
-          <boolProp name="TransactionController.parent">false</boolProp>
-        </TransactionController>
-        <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Large-Scale Cluster 생성" enabled="true">
-            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments">
-                <elementProp name="" elementType="HTTPArgument">
-                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">{&#xd;
-   &quot;name&quot;: &quot;${CLUSTER}&quot;,&#xd;
+   &quot;name&quot;: &quot;${c_CLUSTER}&quot;,&#xd;
    &quot;label&quot;: &quot;lab.&quot;,&#xd;
    &quot;description&quot;: &quot;create a cluster test&quot;,&#xd;
    &quot;controlPlane&quot;: [&#xd;
@@ -1553,11 +1318,12 @@ vars.put(&quot;c_SPEC&quot;, 		c_spec);</stringProp>
       { &quot;connection&quot;: &quot;config-aws-${REGION}&quot;, &quot;count&quot;: 10, &quot;spec&quot;: &quot;${AWS_SPEC}&quot; },&#xd;
       { &quot;connection&quot;: &quot;config-gcp-${REGION}&quot;, &quot;count&quot;: 10, &quot;spec&quot;: &quot;${GCP_SPEC}&quot; },&#xd;
       { &quot;connection&quot;: &quot;config-azure-${REGION}&quot;, &quot;count&quot;: 10, &quot;spec&quot;: &quot;${AZURE_SPEC}&quot; },&#xd;
-      { &quot;connection&quot;: &quot;config-alibaba-${REGION}&quot;, &quot;count&quot;: 10, &quot;spec&quot;: &quot;${ALIBABA_SPEC}&quot; }&#xd;
+      { &quot;connection&quot;: &quot;config-alibaba-${REGION}&quot;, &quot;count&quot;: 10, &quot;spec&quot;: &quot;${ALIBABA_SPEC}&quot; },&#xd;
+      { &quot;connection&quot;: &quot;config-tencent-${REGION}&quot;, &quot;count&quot;: 10, &quot;spec&quot;: &quot;${TENCENT_SPEC}&quot; }&#xd;
     ],&#xd;
     &quot;config&quot;: {&#xd;
         &quot;kubernetes&quot;: {&#xd;
-            &quot;networkCni&quot;: &quot;${CNI}&quot;,&#xd;
+            &quot;networkCni&quot;: &quot;kilo&quot;,&#xd;
             &quot;podCidr&quot;: &quot;10.244.0.0/16&quot;,&#xd;
             &quot;serviceCidr&quot;: &quot;10.96.0.0/12&quot;,&#xd;
             &quot;serviceDnsDomain&quot;: &quot;cluster.local&quot;&#xd;
@@ -1601,7 +1367,7 @@ vars.put(&quot;c_SPEC&quot;, 		c_spec);</stringProp>
             </BeanShellPostProcessor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Large-Scale Cluster 삭제" enabled="false">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Cluster 삭제" enabled="false">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -1609,7 +1375,7 @@ vars.put(&quot;c_SPEC&quot;, 		c_spec);</stringProp>
             <stringProp name="HTTPSampler.port">${PORT_MCKS}</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${CLUSTER}</stringProp>
+            <stringProp name="HTTPSampler.path">/mcks/ns/${NAMESPACE}/clusters/${c_CLUSTER}</stringProp>
             <stringProp name="HTTPSampler.method">DELETE</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -1916,7 +1682,7 @@ vars.put(&quot;c_REGION&quot;,	c_region);
 vars.put(&quot;c_ZONE&quot;,		c_zone);</stringProp>
             </BeanShellPreProcessor>
             <hashTree/>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Connection 삭제" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Connection 삭제" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -1944,7 +1710,7 @@ prev.setResponseOK();</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Credential 삭제" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Credential 삭제" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -1972,7 +1738,7 @@ prev.setResponseOK();</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Region 삭제" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Region 삭제" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -2000,7 +1766,7 @@ prev.setResponseOK();</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Driver 삭제" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Driver 삭제" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
