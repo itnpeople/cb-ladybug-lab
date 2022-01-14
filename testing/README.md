@@ -17,14 +17,14 @@ $ kubectl apply -f yaml/jenkins-jmeter.yaml
 * CSP별 Credentials 정보 환경변수 파일 생성
 
 ```
+$ source "${HOME}/.ssh/openstack-openrc.sh"
 $ ./credentials.sh \
   aws="${HOME}/.aws/credentials" \
   gcp="${HOME}/.ssh/google-credential-cloudbarista.json" \
   azure="${HOME}/.azure/azure-credential-cloudbarista.json" \
   alibaba="${HOME}/.ssh/alibaba_accesskey.csv" \
   tencent="${HOME}/.tccli/default.credential" \
-  ibm="${HOME}/.ssh/ibm-apikey.json" \
-  openstack="${HOME}/.ssh/openstack-openrc.sh" > credentials
+  ibm="${HOME}/.ssh/ibm-apikey.json" > credentials
 $ chmod +x credentials
 ```
 

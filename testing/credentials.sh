@@ -10,7 +10,7 @@ do
             azure)      AZURE_FILE=${VALUE} ;;
             alibaba)    ALIBABA_FILE=${VALUE} ;;
             tencent)    TENCENT_FILE=${VALUE} ;;
-            oepnstack)  OPENSTACK_FILE=${VALUE} ;;
+            openstack)  OPENSTACK_FILE=${VALUE} ;;
             ibm)        IBM_FILE=${VALUE} ;;
             *)   
     esac    
@@ -59,14 +59,17 @@ if [ "${TENCENT_FILE}" != "" ]; then
 	echo "export TENCENT_SECRET_ID=\"${TENCENT_SECRET_ID}\""
 	echo "export TENCENT_SECRET_KEY=\"${TENCENT_SECRET_KEY}\""
 fi
-
-#if [ "${OPENSTACK_FILE}" != "" ]; then 
-#	#FILE="${HOME}/.ssh/openstack-openrc.sh"
-#	source "${OPENSTACK_FILE}"
-#fi
-
 if [ "${IBM_FILE}" != "" ]; then 
 	#FILE="${HOME}/.ssh/ibm-apikey.json"
 	export IBM_API_KEY="$(cat ${IBM_FILE} | jq '.apikey' | sed  '/^$/d; s/\r//; s/"//g')"
 	echo "export IBM_API_KEY=\"${IBM_API_KEY}\""
+fi
+if [ "${OS_AUTH_URL}" != "" ]; then 
+    #FILE="${HOME}/.ssh/openstack-openrc.sh"
+    echo "export OS_AUTH_URL=\"${OS_AUTH_URL}\""
+    echo "export OS_USERNAME=\"${OS_USERNAME}\""
+    echo "export OS_PASSWORD=\"${OS_PASSWORD}\""
+    echo "export OS_USER_DOMAIN_NAME=\"${OS_USER_DOMAIN_NAME}\""
+    echo "export OS_PROJECT_ID=\"${OS_PROJECT_ID}\""
+    echo "export OS_REGION_NAME=\"${OS_REGION_NAME}\""
 fi

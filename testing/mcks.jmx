@@ -75,8 +75,8 @@
             <stringProp name="Argument.value">tencent</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="_CSP_6" elementType="Argument">
-            <stringProp name="Argument.name">_CSP_6</stringProp>
+          <elementProp name="CSP_6" elementType="Argument">
+            <stringProp name="Argument.name">CSP_6</stringProp>
             <stringProp name="Argument.value">ibm</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -93,7 +93,7 @@
           </elementProp>
           <elementProp name="CNI" elementType="Argument">
             <stringProp name="Argument.name">CNI</stringProp>
-            <stringProp name="Argument.value">canal</stringProp>
+            <stringProp name="Argument.value">kilo</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">canal, kilo</stringProp>
           </elementProp>
@@ -279,7 +279,7 @@ vars.put(&quot;StatusCode&quot;,&quot;500&quot;);</stringProp>
           <boolProp name="displaySystemProperties">false</boolProp>
         </DebugSampler>
         <hashTree/>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Connection Info.&gt;" enabled="true">
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Connection Info.&gt;" enabled="false">
           <boolProp name="TransactionController.includeTimers">false</boolProp>
           <boolProp name="TransactionController.parent">false</boolProp>
         </TransactionController>
@@ -456,7 +456,7 @@ vars.put(&quot;c_ZONE&quot;,		c_zone);</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="AZURE면" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="if AZURE Region 생성" enabled="true">
               <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;CSP&quot;) == &quot;azure&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -506,7 +506,7 @@ vars.put(&quot;c_ZONE&quot;,		c_zone);</stringProp>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="AZURE가 아니먄" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="if not AZURE Region 생성" enabled="true">
               <stringProp name="IfController.condition">${__javaScript(vars.get(&quot;CSP&quot;) != &quot;azure&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -564,7 +564,7 @@ vars.put(&quot;c_ZONE&quot;,		c_zone);</stringProp>
               <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
               <stringProp name="HTTPSampler.protocol"></stringProp>
               <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/spider/credential/credential-${CSP}-${REGION}</stringProp>
+              <stringProp name="HTTPSampler.path">/spider/credential/credential-${CSP}</stringProp>
               <stringProp name="HTTPSampler.method">DELETE</stringProp>
               <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -584,7 +584,7 @@ prev.setResponseOK();</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AWS" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AWS Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;aws&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -597,7 +597,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${AWS_SECRET_ID}&quot;},&#xd;
@@ -633,7 +633,7 @@ prev.setResponseOK();</stringProp>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If GCP" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If GCP Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;gcp&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">true</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -646,7 +646,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ClientEmail&quot;, &quot;Value&quot; : &quot;${GCP_SA}&quot;},&#xd;
@@ -683,7 +683,7 @@ prev.setResponseOK();</stringProp>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AZURE" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If AZURE Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;azure&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">true</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -696,7 +696,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ClientId&quot;,       &quot;Value&quot; : &quot;${AZURE_CLIENT_ID}&quot;},&#xd;
@@ -734,7 +734,7 @@ prev.setResponseOK();</stringProp>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If OpenStack" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If OpenStack Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;openstack&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">true</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -747,7 +747,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;IdentityEndpoint&quot;, &quot;Value&quot; : &quot;${OS_AUTH_URL}&quot;},&#xd;
@@ -786,7 +786,7 @@ prev.setResponseOK();</stringProp>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If ALIBABA" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If ALIBABA Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;alibaba&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -799,7 +799,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${ALIBABA_SECRET_ID}&quot;},&#xd;
@@ -835,7 +835,7 @@ prev.setResponseOK();</stringProp>
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -848,7 +848,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
@@ -883,57 +883,8 @@ prev.setResponseOK();</stringProp>
                 </HeaderManager>
                 <hashTree/>
               </hashTree>
-              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If TENCENT" enabled="true">
-                <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;tencent&quot;)}</stringProp>
-                <boolProp name="IfController.evaluateAll">false</boolProp>
-                <boolProp name="IfController.useExpression">true</boolProp>
-              </IfController>
-              <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TENCENT Credential생성" enabled="true">
-                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments">
-                      <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
-&quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
-&quot;KeyValueInfoList&quot; : [&#xd;
-    {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
-    {&quot;Key&quot; : &quot;ClientSecret&quot;, &quot;Value&quot; : &quot;${TENCENT_SECRET_KEY}&quot;}&#xd;
-]}</stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </elementProp>
-                  <stringProp name="HTTPSampler.domain">${HOST}</stringProp>
-                  <stringProp name="HTTPSampler.port">${PORT_SPIDER}</stringProp>
-                  <stringProp name="HTTPSampler.protocol"></stringProp>
-                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                  <stringProp name="HTTPSampler.path">/spider/credential</stringProp>
-                  <stringProp name="HTTPSampler.method">POST</stringProp>
-                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                  <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
-                </HTTPSamplerProxy>
-                <hashTree>
-                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header" enabled="true">
-                    <collectionProp name="HeaderManager.headers">
-                      <elementProp name="" elementType="Header">
-                        <stringProp name="Header.name">Content-Type</stringProp>
-                        <stringProp name="Header.value">application/json</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </HeaderManager>
-                  <hashTree/>
-                </hashTree>
-              </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If IBM" enabled="true">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If IBM Credential 생성" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;CSP&quot;)==&quot;ibm&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
@@ -946,7 +897,7 @@ prev.setResponseOK();</stringProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ApiKey&quot;,     &quot;Value&quot; : &quot;${IBM_API_KEY}&quot;}&#xd;
@@ -993,7 +944,7 @@ prev.setResponseOK();</stringProp>
                       <elementProp name="" elementType="HTTPArgument">
                         <boolProp name="HTTPArgument.always_encode">false</boolProp>
                         <stringProp name="Argument.value">{&#xd;
-&quot;CredentialName&quot;   : &quot;credential-${CSP}-${REGION}&quot;,&#xd;
+&quot;CredentialName&quot;   : &quot;credential-${CSP}&quot;,&#xd;
 &quot;ProviderName&quot;     : &quot;${CSP_UPPER}&quot;,&#xd;
 &quot;KeyValueInfoList&quot; : [&#xd;
     {&quot;Key&quot; : &quot;ClientId&quot;,     &quot;Value&quot; : &quot;${TENCENT_SECRET_ID}&quot;},&#xd;
@@ -1067,7 +1018,7 @@ prev.setResponseOK();</stringProp>
 &quot;ConfigName&quot;     : &quot;${c_CONFIG}&quot;,&#xd;
 &quot;ProviderName&quot;   : &quot;${CSP_UPPER}&quot;, &#xd;
 &quot;DriverName&quot;     : &quot;${CSP}-driver-v1.0&quot;, &#xd;
-&quot;CredentialName&quot; : &quot;credential-${CSP}-${REGION}&quot;, &#xd;
+&quot;CredentialName&quot; : &quot;credential-${CSP}&quot;, &#xd;
 &quot;RegionName&quot;     : &quot;region-${CSP}-${REGION}&quot;&#xd;
 }</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
@@ -1355,7 +1306,7 @@ vars.put(&quot;c_SPEC&quot;, 		c_spec);</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Node 추가" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="${CSP_UPPER} Node 추가" enabled="false">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
@@ -1531,7 +1482,7 @@ vars.put(&quot;c_SPEC&quot;, 		c_spec);</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Large-Scale&gt;" enabled="true">
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="&lt;Large-Scale&gt;" enabled="false">
           <boolProp name="TransactionController.includeTimers">false</boolProp>
           <boolProp name="TransactionController.parent">false</boolProp>
         </TransactionController>
