@@ -24,7 +24,8 @@ $ ./credentials.sh \
   azure="${HOME}/.azure/azure-credential-cloudbarista.json" \
   alibaba="${HOME}/.ssh/alibaba_accesskey.csv" \
   tencent="${HOME}/.tccli/default.credential" \
-  ibm="${HOME}/.ssh/ibm-apikey.json" > credentials
+  ibm="${HOME}/.ssh/ibm-apikey.json" \
+  cloudit="${HOME}/.ssh/cloudit-credential.sh" > credentials
 $ chmod +x credentials
 ```
 
