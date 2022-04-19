@@ -27,19 +27,6 @@ spec:
   nodeName: $2
 ---
 apiVersion: v1
-kind: Pod
-metadata:
-  name: httpbin-3
-  labels:
-    app: httpbin-3
-spec:
-  containers:
-  - image: docker.io/honester/httpbin:latest
-    imagePullPolicy: IfNotPresent
-    name: httpbin
-  nodeName: $3
----
-apiVersion: v1
 kind: Service
 metadata:
   name: httpbin-1
@@ -68,8 +55,24 @@ spec:
     - protocol: TCP
       port: 5201
       name: "iperf3"
----
+EOF
 
+if [ "$#" -gt 2 ]; then 
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpbin-3
+  labels:
+    app: httpbin-3
+spec:
+  containers:
+  - image: docker.io/honester/httpbin:latest
+    imagePullPolicy: IfNotPresent
+    name: httpbin
+  nodeName: $3
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -85,3 +88,4 @@ spec:
       port: 5201
       name: "iperf3"
 EOF
+fi
