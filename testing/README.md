@@ -1,11 +1,140 @@
-# JMeter Testing (kubernetes)
+# Testing Lab.
+
+## Using `cbctl`
+> https://github.com/itnpeople/cbctl
+
+* Initialize (aws, gcp, azure)
+```
+$ cbctl namespace create acornsoft
+
+$ cbctl driver create aws
+$ cbctl driver create gcp
+$ cbctl driver create azure
+$ cbctl driver list
+
+$ source ./examples/credentials.sh \
+  aws="${HOME}/.aws/credentials" \
+  gcp="${HOME}/.ssh/google-credential-cloudbarista.json" \
+  azure="${HOME}/.azure/azure-credential-cloudbarista.json"
+$ cbctl credential create credential-aws --csp aws --secret-id "$AWS_SECRET_ID" --secret "$AWS_SECRET_KEY"
+$ cbctl credential create credential-gcp --csp gcp --client-email "$GCP_SA" --project-id "$GCP_PROJECT" --private-key "$GCP_PKEY"
+$ cbctl credential create credential-azure --csp azure --secret-id "$AZURE_CLIENT_ID" --secret "$AZURE_CLIENT_SECRET" --subscription "$AZURE_SUBSCRIPTION_ID" --tenant "$AZURE_TENANT_ID"
+$ cbctl credential list
+
+$ cbctl region create region-aws-tokyo --csp aws --region ap-northeast-1 --zone ap-northeast-1a 
+$ cbctl region create region-gcp-tokyo --csp gcp --region asia-northeast1 --zone asia-northeast1-a
+$ cbctl region create region-azure-tokyo --csp azure --location japaneast --resource-group cb-mcks
+$ cbctl region list
+
+$ cbctl connection create config-aws-tokyo --csp aws --region region-aws-tokyo --credential credential-aws
+$ cbctl connection create config-gcp-tokyo --csp gcp --region region-gcp-tokyo --credential credential-gcp
+$ cbctl connection create config-azure-tokyo --csp azure --region region-azure-tokyo --credential credential-azure
+$ cbctl connection list
+
+$ cbctl connection test config-aws-tokyo
+$ cbctl connection test config-gcp-tokyo
+$ cbctl connection test config-azure-tokyo
+```
+
+* create a cluster (azure + aws)
+```
+$ cbctl cluster create -f - <<EOF
+name: cb-cluster
+label: lab.
+description: create a cluster test
+controlPlane:
+  - connection: config-azure-tokyo
+    count: 1
+    spec: Standard_B2s
+worker:
+  - connection: config-aws-tokyo
+    count: 1
+    spec: t2.medium
+config:
+  kubernetes:
+    networkCni: calico
+    podCidr: 10.244.0.0/16
+    serviceCidr: 10.96.0.0/12
+    serviceDnsDomain: cluster.local
+EOF
+
+$ cbctl cluster update-kubeconfig cb-cluster
+$ kubectl get node -o wide
+
+$ cbctl node get-key  c-1-8mbil --cluster cb-cluster  > ssh/cb-cluster.pem
+$ chmod 400 ssh/cb-cluster.pem
+$ ssh -i ssh/cb-cluster.pem cb-user@52.196.137.231
+```
+
+* add nodes 
+```
+$ cbctl node add --cluster cb-cluster --worker-connection="config-aws-tokyo" --worker-count="1" --worker-spec="t2.medium"
+$ cbctl node add --cluster cb-cluster --worker-connection="config-gcp-tokyo" --worker-count="1" --worker-spec="e2-highcpu-4"
+$ cbctl node add --cluster cb-cluster --worker-connection="config-azure-tokyo" --worker-count="1" --worker-spec="Standard_B2s"
+$ cbctl node add --cluster cb-cluster --worker-connection="config-ibm-tokyo" --worker-count="1" --worker-spec="bx2-2x8"
+```
+
+* delete a node
+```
+$ cbctl node delete w-1-d4rra --cluster cb-cluster
+```
+
+
+* delete a cluster
+```
+$ cbctl cluster delete cb-cluster
+```
+
+### Use cases
+
+```
+$ cbctl cluster create -f - <<EOF
+name: cb-cluster
+label: lab.
+description: create a cluster test
+controlPlane:
+  - connection: config-aws-tokyo
+    count: 1
+    spec: t2.medium
+worker:
+  - connection: config-gcp-tokyo
+    count: 1
+    spec: e2-highcpu-4
+config:
+  kubernetes:
+    networkCni: calico
+    podCidr: 10.244.0.0/16
+    serviceCidr: 10.96.0.0/12
+    serviceDnsDomain: cluster.local
+EOF
+
+$ cbctl cluster update-kubeconfig cb-cluster
+$ kubectl get node -o wide
+
+$ MASTER="$(kubectl get node -o custom-columns=:metadata.name --no-headers | awk 'NR==1 { print;}')"
+$ WORKER="$(kubectl get node -o custom-columns=:metadata.name --no-headers | awk 'NR==2 { print;}')"
+$ MASTER_IP="$(kubectl get node -o custom-columns=:status.addresses[0].address --no-headers | awk 'NR==1 { print;}')"
+$ WORKER_IP="$(kubectl get node -o custom-columns=:status.addresses[0].address --no-headers | awk 'NR==2 { print;}')"
+$ echo "MASTER=\"${MASTER}\"; WORKER=\"${WORKER}\"; MASTER_IP=\"${MASTER_IP}\"; WORKER_IP=\"${WORKER_IP}\""
+
+$ cbctl node get-key ${MASTER}  --cluster cb-cluster  > ssh/${MASTER}.pem
+$ chmod 400 ssh/${MASTER}.pem
+$ ssh -i ssh/${MASTER}.pem cb-user@${MASTER_IP}
+
+
+$ cbctl node get-key ${WORKER} --cluster cb-cluster  > ssh/${WORKER}.pem
+$ chmod 400 ssh/${WORKER}.pem
+$ ssh -i ssh/${WORKER}.pem cb-user@${WORKER_IP}
+```
+
+## JMeter Testing (kubernetes)
 > https://jmeter.apache.org/
 > https://hub.docker.com/r/bitnami/jenkins
 > https://github.com/bitnami/bitnami-docker-jenkins
 
-## Installation
+### Installation
 
-### MKCK 및 Jenkin 배포
+#### MKCK 및 Jenkin 배포
 
 * deployment
 
@@ -42,7 +171,7 @@ $ kubectl cp credentials $POD:/opt/bitnami/jmeter
 $ kubectl exec -it $POD -- ls -l /opt/bitnami/jmeter
 ```
 
-### Jenkin Web UI에서 빌드 프로젝트 생성
+#### Jenkin Web UI에서 빌드 프로젝트 생성
 * open in your browser `http://<cluster-ip>:30084/` 
 * enter userid, password `admin`,`admin1234`
 * Jenkins 빌드 추가 (Execute shell)
@@ -53,7 +182,7 @@ $ source /opt/bitnami/jmeter/credentials
 $ jmeter -n -t /opt/bitnami/jmeter/mcks.jmx -l /opt/bitnami/jmeter/$(date "+%Y%m%d").jtl
 ```
 
-## 테스트 실행
+### 테스트 실행
 
 * Jenkins Web UI에서 Build 수행
 
@@ -69,15 +198,15 @@ $ cat mcks.jtl
 * JMeter 등으로 결과 확인 (mcks.jtl)
 
 
-## Developments
+### Developments
 
-### Docker build
+#### Docker build
 
 ```
 $ docker build ./images/jenkins-jmeter --tag honester/jenkins-jmeter:latest
 ```
 
-### JMeter jmx
+#### JMeter jmx
 
 * `credentials` 파일이 없다면 `credentials.sh` 스크립트 실행하여 실행
 ```
@@ -100,10 +229,10 @@ $ jmeter -t mcks.jmx
 ```
 
 
-## Distributed Testing (docker)
+### Distributed Testing (docker)
 
 
-### make images
+#### make images
 
 ```
 $ docker build ./images/jmbase --tag honester/jmbase:latest
@@ -114,7 +243,7 @@ $ docker build ./images/jmserver --tag honester/jmserver:latest
 $ docker push honester/jenkins-jmeter:latest
 ```
 
-### verify
+#### verify
 
 * docker run
 
