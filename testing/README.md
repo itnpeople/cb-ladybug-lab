@@ -88,7 +88,7 @@ $ cbctl cluster delete cb-cluster
 ### Use cases
 
 ```
-$ cbctl cluster create -f - <<EOF
+$ cbctl create cluster -f - <<EOF
 name: cb-cluster
 label: lab.
 description: create a cluster test
@@ -100,15 +100,18 @@ worker:
   - connection: config-gcp-tokyo
     count: 1
     spec: e2-highcpu-4
+  - connection: config-aws-tokyo
+    count: 1
+    spec: t2.medium
 config:
   kubernetes:
-    networkCni: calico
+    networkCni: canal
     podCidr: 10.244.0.0/16
     serviceCidr: 10.96.0.0/12
     serviceDnsDomain: cluster.local
 EOF
 
-$ cbctl cluster update-kubeconfig cb-cluster
+$ cbctl update-kubeconfig cb-cluster
 $ kubectl get node -o wide
 
 $ MASTER="$(kubectl get node -o custom-columns=:metadata.name --no-headers | awk 'NR==1 { print;}')"
@@ -117,7 +120,7 @@ $ MASTER_IP="$(kubectl get node -o custom-columns=:status.addresses[0].address -
 $ WORKER_IP="$(kubectl get node -o custom-columns=:status.addresses[0].address --no-headers | awk 'NR==2 { print;}')"
 $ echo "MASTER=\"${MASTER}\"; WORKER=\"${WORKER}\"; MASTER_IP=\"${MASTER_IP}\"; WORKER_IP=\"${WORKER_IP}\""
 
-$ cbctl node get-key ${MASTER}  --cluster cb-cluster  > ssh/${MASTER}.pem
+$ cbctl get-key ${MASTER}  --cluster cb-cluster  > ssh/${MASTER}.pem
 $ chmod 400 ssh/${MASTER}.pem
 $ ssh -i ssh/${MASTER}.pem cb-user@${MASTER_IP}
 
