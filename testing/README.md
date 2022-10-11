@@ -5,40 +5,37 @@
 
 * Initialize (aws, gcp, azure)
 ```
-$ cbctl namespace create acornsoft
+$ cbctl create namespace acornsoft
 
-$ cbctl driver create aws
-$ cbctl driver create gcp
-$ cbctl driver create azure
-$ cbctl driver list
+$ cbctl create driver aws
+$ cbctl create driver gcp
+$ cbctl create driver azure
+$ cbctl create driver list
 
-$ source ./examples/credentials.sh \
+$ source credentials.sh \
   aws="${HOME}/.aws/credentials" \
   gcp="${HOME}/.ssh/google-credential-cloudbarista.json" \
   azure="${HOME}/.azure/azure-credential-cloudbarista.json"
-$ cbctl credential create credential-aws --csp aws --secret-id "$AWS_SECRET_ID" --secret "$AWS_SECRET_KEY"
-$ cbctl credential create credential-gcp --csp gcp --client-email "$GCP_SA" --project-id "$GCP_PROJECT" --private-key "$GCP_PKEY"
-$ cbctl credential create credential-azure --csp azure --secret-id "$AZURE_CLIENT_ID" --secret "$AZURE_CLIENT_SECRET" --subscription "$AZURE_SUBSCRIPTION_ID" --tenant "$AZURE_TENANT_ID"
-$ cbctl credential list
+$ cbctl create credential credential-aws --csp aws --secret-id "$AWS_SECRET_ID" --secret "$AWS_SECRET_KEY"
+$ cbctl create credential credential-gcp --csp gcp --client-email "$GCP_SA" --project-id "$GCP_PROJECT" --private-key "$GCP_PKEY"
+$ cbctl create credential credential-azure --csp azure --secret-id "$AZURE_CLIENT_ID" --secret "$AZURE_CLIENT_SECRET" --subscription "$AZURE_SUBSCRIPTION_ID" --tenant "$AZURE_TENANT_ID"
+$ cbctl get credential
 
-$ cbctl region create region-aws-tokyo --csp aws --region ap-northeast-1 --zone ap-northeast-1a 
-$ cbctl region create region-gcp-tokyo --csp gcp --region asia-northeast1 --zone asia-northeast1-a
-$ cbctl region create region-azure-tokyo --csp azure --location japaneast --resource-group cb-mcks
-$ cbctl region list
+$ cbctl create region region-aws-tokyo --csp aws --region ap-northeast-1 --zone ap-northeast-1a 
+$ cbctl create region region-gcp-tokyo --csp gcp --region asia-northeast1 --zone asia-northeast1-a
+$ cbctl create region region-azure-tokyo --csp azure --location japaneast --resource-group cb-mcks
+$ cbctl get region
 
-$ cbctl connection create config-aws-tokyo --csp aws --region region-aws-tokyo --credential credential-aws
-$ cbctl connection create config-gcp-tokyo --csp gcp --region region-gcp-tokyo --credential credential-gcp
-$ cbctl connection create config-azure-tokyo --csp azure --region region-azure-tokyo --credential credential-azure
-$ cbctl connection list
-
-$ cbctl connection test config-aws-tokyo
-$ cbctl connection test config-gcp-tokyo
-$ cbctl connection test config-azure-tokyo
+$ cbctl create connection config-aws-tokyo --csp aws --region region-aws-tokyo --credential credential-aws
+$ cbctl create connection config-gcp-tokyo --csp gcp --region region-gcp-tokyo --credential credential-gcp
+$ cbctl create connection config-azure-tokyo --csp azure --region region-azure-tokyo --credential credential-azure
+$ cbctl get connection
 ```
+
 
 * create a cluster (azure + aws)
 ```
-$ cbctl cluster create -f - <<EOF
+$ cbctl create cluster -f - <<EOF
 name: cb-cluster
 label: lab.
 description: create a cluster test
@@ -52,7 +49,7 @@ worker:
     spec: t2.medium
 config:
   kubernetes:
-    networkCni: calico
+    networkCni: canal
     podCidr: 10.244.0.0/16
     serviceCidr: 10.96.0.0/12
     serviceDnsDomain: cluster.local
